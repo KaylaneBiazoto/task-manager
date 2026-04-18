@@ -1,6 +1,8 @@
 package com.example.task_manager_backend.core.advice;
 
 import com.example.task_manager_backend.core.dto.ApiResponse;
+import com.example.task_manager_backend.features.projects.core.ProjectBusinessException;
+import com.example.task_manager_backend.features.projects.core.ProjectNotFoundException;
 import com.example.task_manager_backend.features.tasks.core.TaskBusinessException;
 import com.example.task_manager_backend.features.tasks.core.TaskNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TaskBusinessException.class)
     public ResponseEntity<ApiResponse<Object>> handleTaskBusinessException(TaskBusinessException ex, WebRequest request) {
+        ApiResponse<Object> response = new ApiResponse<>(false, ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(ProjectNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleProjectNotFoundException(ProjectNotFoundException ex, WebRequest request) {
+        ApiResponse<Object> response = new ApiResponse<>(false, ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ProjectBusinessException.class)
+    public ResponseEntity<ApiResponse<Object>> handleProjectBusinessException(ProjectBusinessException ex, WebRequest request) {
         ApiResponse<Object> response = new ApiResponse<>(false, ex.getMessage(), null);
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
