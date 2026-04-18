@@ -15,13 +15,13 @@ public class CreateUserHandler {
     }
 
     public User execute(CreateUserRequest request) {
-        // Validar se email já existe
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+        // Validar se email já existe (somente usuários ativos)
+        if (userRepository.findByEmailAndActiveTrue(request.getEmail()).isPresent()) {
             throw new UserBusinessException("Email already registered");
         }
 
-        // Validar se username já existe
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+        // Validar se username já existe (somente usuários ativos)
+        if (userRepository.findByUsernameAndActiveTrue(request.getUsername()).isPresent()) {
             throw new UserBusinessException("Username already taken");
         }
 

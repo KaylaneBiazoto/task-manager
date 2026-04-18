@@ -14,7 +14,7 @@ public class GetUserByIdHandler {
     }
 
     public User execute(Long userId) {
-        return userRepository.findById(userId)
+        return userRepository.findByIdAndActiveTrue(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
     }
 }

@@ -15,7 +15,7 @@ public class ListUsersHandler {
     }
 
     public Page<User> execute(Pageable pageable) {
-        return userRepository.findAll(pageable);
+        return userRepository.findAllActive(pageable);
     }
 }
 

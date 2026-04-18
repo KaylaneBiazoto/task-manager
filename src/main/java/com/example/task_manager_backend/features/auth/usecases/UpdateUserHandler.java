@@ -16,13 +16,13 @@ public class UpdateUserHandler {
     }
 
     public User execute(Long userId, UpdateUserRequest request) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByIdAndActiveTrue(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
         // Update username if provided and unique
         if (request.getUsername() != null && !request.getUsername().isBlank()) {
             if (!request.getUsername().equals(user.getUsername())) {
-                if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+                if (userRepository.findByUsernameAndActiveTrue(request.getUsername()).isPresent()) {
                     throw new UserBusinessException("Username already taken");
                 }
                 user.setUsername(request.getUsername());
@@ -32,7 +32,7 @@ public class UpdateUserHandler {
         // Update email if provided and unique
         if (request.getEmail() != null && !request.getEmail().isBlank()) {
             if (!request.getEmail().equals(user.getEmail())) {
-                if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+                if (userRepository.findByEmailAndActiveTrue(request.getEmail()).isPresent()) {
                     throw new UserBusinessException("Email already registered");
                 }
                 user.setEmail(request.getEmail());

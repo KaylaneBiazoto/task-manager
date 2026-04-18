@@ -24,12 +24,12 @@ public class CreateTaskHandler {
     }
 
     public Task execute(CreateTaskRequest request) {
-        // Validar projeto existe
-        Project project = projectRepository.findById(request.getProjectId())
+        // Validar projeto existe (apenas ativos)
+        Project project = projectRepository.findByIdAndActiveTrue(request.getProjectId())
                 .orElseThrow(() -> new TaskBusinessException("Project not found"));
 
-        // Validar assignee existe
-        User assignee = userRepository.findById(request.getAssigneeId())
+        // Validar assignee existe (apenas ativos)
+        User assignee = userRepository.findByIdAndActiveTrue(request.getAssigneeId())
                 .orElseThrow(() -> new TaskBusinessException("Assignee user not found"));
 
         // Validar se assignee é membro do projeto

@@ -26,8 +26,8 @@ public class CreateProjectHandler {
     }
 
     public Project execute(CreateProjectRequest request, Long ownerId) {
-        // Validar que o owner existe
-        User owner = userRepository.findById(ownerId)
+        // Validar que o owner existe (apenas ativos)
+        User owner = userRepository.findByIdAndActiveTrue(ownerId)
                 .orElseThrow(() -> new ProjectBusinessException("Owner user not found"));
 
         // Criar projeto
