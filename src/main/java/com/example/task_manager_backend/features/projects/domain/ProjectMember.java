@@ -1,6 +1,6 @@
 package com.example.task_manager_backend.features.projects.domain;
 
-import com.example.task_manager_backend.features.tasks.domain.Task;
+import com.example.task_manager_backend.features.auth.domain.User;
 import com.example.task_manager_backend.infrastructure.persistence.BaseAuditableEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,34 +8,30 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "projects")
-public class Project extends BaseAuditableEntity {
+@Table(name = "project_members")
+public class ProjectMember extends BaseAuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 150)
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<Task> tasks;
-
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ProjectMember> members;
+    @Column(nullable = false)
+    private String projectRole;
 
     @Column(nullable = false)
     private Boolean active = true;
 }
-
 
