@@ -79,6 +79,7 @@ public class ProjectService {
         dto.setId(project.getId());
         dto.setName(project.getName());
         dto.setDescription(project.getDescription());
+        dto.setOwnerId(project.getOwnerId());
         dto.setActive(project.getActive());
         dto.setCreatedAt(project.getCreatedAt());
         dto.setUpdatedAt(project.getUpdatedAt());

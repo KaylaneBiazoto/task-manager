@@ -24,4 +24,7 @@ public class User extends BaseAuditableEntity {
     private String password;
 
     private String email;
+
+    @Column(nullable = false, length = 20)
+    private String role = "MEMBER";
 }

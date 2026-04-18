@@ -35,6 +35,7 @@ public class CreateProjectHandler {
         project.setName(request.getName());
         project.setDescription(request.getDescription());
         project.setActive(true);
+        project.setOwnerId(owner.getId());
 
         Project savedProject = projectRepository.save(project);
 

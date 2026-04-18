@@ -13,5 +13,7 @@ public class CreateProjectRequest {
     private String name;
 
     private String description;
+
+    private Long ownerId;
 }
 

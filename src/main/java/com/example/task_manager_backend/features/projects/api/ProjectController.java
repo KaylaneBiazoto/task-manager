@@ -24,9 +24,7 @@ public class ProjectController {
     @PostMapping
     public ResponseEntity<ApiResponse<ProjectDto>> createProject(
             @Valid @RequestBody CreateProjectRequest request) {
-        // TODO: Usar usuário autenticado em vez de ID fixo
-        Long ownerId = 1L; // Placeholder - será substituído com autenticação real
-        ProjectDto project = projectService.createProject(request, ownerId);
+        ProjectDto project = projectService.createProject(request, request.getOwnerId());
         ApiResponse<ProjectDto> response = new ApiResponse<>(true, "Project created successfully", project);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
