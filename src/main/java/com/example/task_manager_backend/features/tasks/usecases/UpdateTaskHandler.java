@@ -35,7 +35,7 @@ public class UpdateTaskHandler {
 
         // Se está tentando mudar o assignee
         if (request.getAssigneeId() != null && !request.getAssigneeId().equals(task.getAssignee().getId())) {
-            User newAssignee = userRepository.findById(request.getAssigneeId())
+            User newAssignee = userRepository.findByIdAndActiveTrue(request.getAssigneeId())
                     .orElseThrow(() -> new TaskBusinessException("Assignee user not found"));
 
             validateAssigneeBelongsToProject(task.getProject(), newAssignee);

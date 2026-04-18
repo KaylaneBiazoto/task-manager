@@ -27,4 +27,7 @@ public class User extends BaseAuditableEntity {
 
     @Column(nullable = false, length = 20)
     private String role = "MEMBER";
+
+    @Column(nullable = false)
+    private Boolean active = true;
 }

@@ -3,6 +3,8 @@ CREATE TABLE users (
     username VARCHAR(150),
     password VARCHAR(255),
     email VARCHAR(180),
+    role VARCHAR(20) NOT NULL DEFAULT 'MEMBER',
+    active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -52,6 +54,12 @@ CREATE INDEX idx_tasks_status ON tasks(status);
 CREATE INDEX idx_tasks_priority ON tasks(priority);
 CREATE INDEX idx_tasks_deadline ON tasks(deadline);
 CREATE INDEX idx_tasks_created_at ON tasks(created_at);
+CREATE INDEX idx_tasks_active ON tasks(active);
 CREATE INDEX idx_project_members_project_id ON project_members(project_id);
 CREATE INDEX idx_project_members_user_id ON project_members(user_id);
+CREATE INDEX idx_project_members_active ON project_members(active);
+CREATE INDEX idx_projects_active ON projects(active);
+CREATE INDEX idx_users_active ON users(active);
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_username ON users(username);
 
