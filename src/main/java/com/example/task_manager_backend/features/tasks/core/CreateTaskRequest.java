@@ -1,7 +1,6 @@
 package com.example.task_manager_backend.features.tasks.core;
 
 import com.example.task_manager_backend.features.tasks.domain.TaskPriority;
-import com.example.task_manager_backend.features.tasks.domain.TaskStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
