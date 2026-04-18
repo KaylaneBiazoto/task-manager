@@ -2,11 +2,9 @@ package com.example.task_manager_backend.features.tasks.dto;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
-/**
- * Simple DTO for tasks.
- */
 public class TaskDTO {
     public UUID id;
     public UUID projectId;
@@ -16,7 +14,7 @@ public class TaskDTO {
     public String status;
     public String priority;
     public LocalDate deadline;
-    public Instant createdAt;
-    public Instant updatedAt;
+    public ZonedDateTime createdAt;
+    public ZonedDateTime updatedAt;
 }
 

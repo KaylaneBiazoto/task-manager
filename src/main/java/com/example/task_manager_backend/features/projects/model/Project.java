@@ -1,20 +1,31 @@
 package com.example.task_manager_backend.features.projects.model;
 
-import java.time.Instant;
-import java.util.UUID;
+import com.example.task_manager_backend.features.auth.model.User;
+import com.example.task_manager_backend.infrastructure.persistence.BaseAuditableEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * Domain model placeholder for Project. Real entity (JPA) will be created under
- * infrastructure.persistence.entity.
- */
-public class Project {
-    private UUID id;
+@Setter
+@Getter
+@Entity
+@Table(name = "projects")
+public class Project extends BaseAuditableEntity {
+
+    @Column(nullable = false, length = 150)
     private String name;
-    private String description;
-    private UUID ownerId;
-    private Instant createdAt;
-    private Instant updatedAt;
 
-    // getters/setters omitted for brevity
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
+
 }
 

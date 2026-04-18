@@ -1,8 +1,5 @@
 package com.example.task_manager_backend.core.dto;
 
-/**
- * Generic API response wrapper used across controllers.
- */
 public class ApiResponse<T> {
     public boolean success;
     public T data;
