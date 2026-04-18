@@ -37,8 +37,11 @@ public class AuthController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<UserDto>>> listUsers(Pageable pageable) {
-        Page<UserDto> users = userService.listUsers(pageable);
+    public ResponseEntity<ApiResponse<Page<UserDto>>> listUsers(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String role,
+            Pageable pageable) {
+        Page<UserDto> users = userService.listUsers(search, role, pageable);
         ApiResponse<Page<UserDto>> response = new ApiResponse<>(true, "Users retrieved successfully", users);
         return ResponseEntity.ok(response);
     }
@@ -59,4 +62,6 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 }
+
+
 

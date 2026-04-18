@@ -6,11 +6,11 @@ import com.example.task_manager_backend.features.tasks.core.TaskDto;
 import com.example.task_manager_backend.features.tasks.core.UpdateTaskRequest;
 import com.example.task_manager_backend.features.tasks.services.TaskFacade;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -36,9 +36,16 @@ public class TaskController {
     }
 
     @GetMapping("/project/{projectId}")
-    public ResponseEntity<ApiResponse<List<TaskDto>>> listTasksByProject(@PathVariable Long projectId) {
-        List<TaskDto> tasks = taskFacade.listTasksByProject(projectId);
-        ApiResponse<List<TaskDto>> response = new ApiResponse<>(true, "Tasks retrieved successfully", tasks);
+    public ResponseEntity<ApiResponse<Page<TaskDto>>> listTasksByProject(
+            @PathVariable Long projectId,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String priority,
+            @RequestParam(required = false) Long assigneeId,
+            Pageable pageable) {
+        Page<TaskDto> tasks = taskFacade.listTasksByProjectWithFilters(
+                projectId, search, status, priority, assigneeId, pageable);
+        ApiResponse<Page<TaskDto>> response = new ApiResponse<>(true, "Tasks retrieved successfully", tasks);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -62,3 +69,5 @@ public class TaskController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
+
+

@@ -17,5 +17,19 @@ public class ListProjectsHandler {
     public Page<Project> execute(Pageable pageable) {
         return projectRepository.findByActiveTrue(pageable);
     }
+    
+    public Page<Project> execute(String search, Long ownerId, Pageable pageable) {
+        if ((search == null || search.isEmpty()) && ownerId == null) {
+            return projectRepository.findByActiveTrue(pageable);
+        }
+        
+        String finalSearch = (search == null || search.isEmpty()) ? "" : search;
+        
+        if (ownerId == null) {
+            return projectRepository.searchActiveProjects(finalSearch, pageable);
+        }
+        
+        return projectRepository.findActiveWithFilters(finalSearch, ownerId, pageable);
+    }
 }
 

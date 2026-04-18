@@ -37,8 +37,11 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<ProjectDto>>> listProjects(Pageable pageable) {
-        Page<ProjectDto> projects = projectService.listProjects(pageable);
+    public ResponseEntity<ApiResponse<Page<ProjectDto>>> listProjects(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Long ownerId,
+            Pageable pageable) {
+        Page<ProjectDto> projects = projectService.listProjects(search, ownerId, pageable);
         ApiResponse<Page<ProjectDto>> response = new ApiResponse<>(true, "Projects retrieved successfully", projects);
         return ResponseEntity.ok(response);
     }
@@ -75,4 +78,6 @@ public class ProjectController {
         return ResponseEntity.ok(response);
     }
 }
+
+
 
