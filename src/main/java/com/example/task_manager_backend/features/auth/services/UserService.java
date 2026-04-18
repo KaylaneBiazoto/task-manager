@@ -46,6 +46,11 @@ public class UserService {
         Page<User> users = listUsersHandler.execute(pageable);
         return users.map(this::mapToDto);
     }
+    
+    public Page<UserDto> listUsers(String search, String role, Pageable pageable) {
+        Page<User> users = listUsersHandler.execute(search, role, pageable);
+        return users.map(this::mapToDto);
+    }
 
     public UserDto updateUser(Long userId, UpdateUserRequest request) {
         User user = updateUserHandler.execute(userId, request);
@@ -67,4 +72,6 @@ public class UserService {
         return dto;
     }
 }
+
+
 

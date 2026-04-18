@@ -52,6 +52,11 @@ public class ProjectService {
         Page<Project> projects = listProjectsHandler.execute(pageable);
         return projects.map(this::mapToDto);
     }
+    
+    public Page<ProjectDto> listProjects(String search, Long ownerId, Pageable pageable) {
+        Page<Project> projects = listProjectsHandler.execute(search, ownerId, pageable);
+        return projects.map(this::mapToDto);
+    }
 
     public ProjectDto updateProject(Long projectId, UpdateProjectRequest request) {
         Project project = updateProjectHandler.execute(projectId, request);
@@ -116,4 +121,6 @@ public class ProjectService {
         );
     }
 }
+
+
 

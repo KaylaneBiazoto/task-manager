@@ -5,6 +5,8 @@ import com.example.task_manager_backend.features.tasks.core.TaskDto;
 import com.example.task_manager_backend.features.tasks.core.UpdateTaskRequest;
 import com.example.task_manager_backend.features.tasks.domain.Task;
 import com.example.task_manager_backend.features.tasks.usecases.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,7 @@ public class TaskFacade {
     private final CreateTaskHandler createTaskHandler;
     private final GetTaskByIdHandler getTaskByIdHandler;
     private final ListTasksByProjectHandler listTasksByProjectHandler;
+    private final ListTasksHandler listTasksHandler;
     private final UpdateTaskHandler updateTaskHandler;
     private final DeleteTaskHandler deleteTaskHandler;
 
@@ -22,11 +25,13 @@ public class TaskFacade {
             CreateTaskHandler createTaskHandler,
             GetTaskByIdHandler getTaskByIdHandler,
             ListTasksByProjectHandler listTasksByProjectHandler,
+            ListTasksHandler listTasksHandler,
             UpdateTaskHandler updateTaskHandler,
             DeleteTaskHandler deleteTaskHandler) {
         this.createTaskHandler = createTaskHandler;
         this.getTaskByIdHandler = getTaskByIdHandler;
         this.listTasksByProjectHandler = listTasksByProjectHandler;
+        this.listTasksHandler = listTasksHandler;
         this.updateTaskHandler = updateTaskHandler;
         this.deleteTaskHandler = deleteTaskHandler;
     }
@@ -46,6 +51,18 @@ public class TaskFacade {
         return tasks.stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
+    }
+    
+    public Page<TaskDto> listTasksByProjectWithFilters(
+            Long projectId,
+            String search,
+            String status,
+            String priority,
+            Long assigneeId,
+            Pageable pageable) {
+        Page<Task> tasks = listTasksHandler.executeByProjectWithFilters(
+                projectId, search, status, priority, assigneeId, pageable);
+        return tasks.map(this::mapToDto);
     }
 
     public TaskDto updateTask(Long taskId, UpdateTaskRequest request, Long currentUserId, String currentUserRole) {
@@ -75,4 +92,6 @@ public class TaskFacade {
         return dto;
     }
 }
+
+
 
