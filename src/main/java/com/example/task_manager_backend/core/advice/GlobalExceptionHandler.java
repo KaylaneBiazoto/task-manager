@@ -1,6 +1,8 @@
 package com.example.task_manager_backend.core.advice;
 
 import com.example.task_manager_backend.core.dto.ApiResponse;
+import com.example.task_manager_backend.features.auth.core.UserBusinessException;
+import com.example.task_manager_backend.features.auth.core.UserNotFoundException;
 import com.example.task_manager_backend.features.projects.core.ProjectBusinessException;
 import com.example.task_manager_backend.features.projects.core.ProjectNotFoundException;
 import com.example.task_manager_backend.features.tasks.core.TaskBusinessException;
@@ -13,6 +15,18 @@ import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
+        ApiResponse<Object> response = new ApiResponse<>(false, ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserBusinessException.class)
+    public ResponseEntity<ApiResponse<Object>> handleUserBusinessException(UserBusinessException ex, WebRequest request) {
+        ApiResponse<Object> response = new ApiResponse<>(false, ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
 
     @ExceptionHandler(TaskNotFoundException.class)
     public ResponseEntity<ApiResponse<Object>> handleTaskNotFoundException(TaskNotFoundException ex, WebRequest request) {

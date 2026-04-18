@@ -36,6 +36,9 @@ public class Project extends BaseAuditableEntity {
 
     @Column(nullable = false)
     private Boolean active = true;
+
+    @Column(nullable = false)
+    private Long ownerId;
 }
 
 
