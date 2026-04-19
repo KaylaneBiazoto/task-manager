@@ -38,11 +38,6 @@ A aplicação estará disponível em: `http://localhost:8080`
 http://localhost:8080/swagger-ui.html
 ```
 
-#### H2 Database Console (desenvolvimento)
-```
-http://localhost:8080/h2-console
-```
-
 ## Configuração
 
 ### Banco de Dados Padrão (H2 em memória)
