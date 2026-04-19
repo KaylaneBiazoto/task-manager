@@ -29,20 +29,20 @@ public class UpdateTaskHandler {
                 .orElseThrow(() -> new TaskNotFoundException("Task not found"));
 
         // Se está tentando mudar o status
-        if (request.getStatus() != null) {
-            validateStatusTransition(task, request.getStatus(), currentUserRole, task.getProject());
+        if (request.status() != null) {
+            validateStatusTransition(task, request.status(), currentUserRole, task.getProject());
         }
 
         // Se está tentando mudar o assignee
-        if (request.getAssigneeId() != null && !request.getAssigneeId().equals(task.getAssignee().getId())) {
-            User newAssignee = userRepository.findByIdAndActiveTrue(request.getAssigneeId())
+        if (request.assigneeId() != null && !request.assigneeId().equals(task.getAssignee().getId())) {
+            User newAssignee = userRepository.findByIdAndActiveTrue(request.assigneeId())
                     .orElseThrow(() -> new TaskBusinessException("Assignee user not found"));
 
             validateAssigneeBelongsToProject(task.getProject(), newAssignee);
 
             // Validar WIP limit para o novo assignee
             long inProgressCount = taskRepository.countInProgressTasksByAssignee(newAssignee.getId(), TaskStatus.IN_PROGRESS);
-            if (inProgressCount >= 5 && (request.getStatus() == null || request.getStatus() == TaskStatus.IN_PROGRESS)) {
+            if (inProgressCount >= 5 && (request.status() == null || request.status() == TaskStatus.IN_PROGRESS)) {
                 throw new TaskBusinessException("New assignee has reached the maximum limit of 5 in-progress tasks (WIP limit exceeded)");
             }
 
@@ -50,20 +50,20 @@ public class UpdateTaskHandler {
         }
 
         // Atualizar outros campos
-        if (request.getTitle() != null) {
-            task.setTitle(request.getTitle());
+        if (request.title() != null) {
+            task.setTitle(request.title());
         }
-        if (request.getDescription() != null) {
-            task.setDescription(request.getDescription());
+        if (request.description() != null) {
+            task.setDescription(request.description());
         }
-        if (request.getPriority() != null) {
-            task.setPriority(request.getPriority());
+        if (request.priority() != null) {
+            task.setPriority(request.priority());
         }
-        if (request.getDeadline() != null) {
-            task.setDeadline(request.getDeadline());
+        if (request.deadline() != null) {
+            task.setDeadline(request.deadline());
         }
-        if (request.getStatus() != null) {
-            task.setStatus(request.getStatus());
+        if (request.status() != null) {
+            task.setStatus(request.status());
         }
 
         return taskRepository.save(task);

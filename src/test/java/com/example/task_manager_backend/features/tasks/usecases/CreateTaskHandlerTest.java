@@ -71,13 +71,7 @@ class CreateTaskHandlerTest {
 
         project.setMembers(List.of(member));
 
-        CreateTaskRequest request = new CreateTaskRequest();
-        request.setTitle(taskTitle);
-        request.setDescription("Test Description");
-        request.setPriority(priority);
-        request.setDeadline(deadline);
-        request.setProjectId(projectId);
-        request.setAssigneeId(assigneeId);
+        CreateTaskRequest request = new CreateTaskRequest(taskTitle, "Test Description", priority, deadline, projectId, assigneeId);
 
         Task savedTask = new Task();
         savedTask.setId(1L);
@@ -111,9 +105,7 @@ class CreateTaskHandlerTest {
     void testExecute_WithInvalidProject_ShouldThrowTaskBusinessException() {
         // Arrange
         Long invalidProjectId = 999L;
-        CreateTaskRequest request = new CreateTaskRequest();
-        request.setProjectId(invalidProjectId);
-        request.setAssigneeId(1L);
+        CreateTaskRequest request = new CreateTaskRequest(null, null, null, null, invalidProjectId, 1L);
 
         when(projectRepository.findByIdAndActiveTrue(invalidProjectId)).thenReturn(Optional.empty());
 
@@ -137,9 +129,7 @@ class CreateTaskHandlerTest {
         project.setId(projectId);
         project.setActive(true);
 
-        CreateTaskRequest request = new CreateTaskRequest();
-        request.setProjectId(projectId);
-        request.setAssigneeId(invalidAssigneeId);
+        CreateTaskRequest request = new CreateTaskRequest(null, null, null, null, projectId, invalidAssigneeId);
 
         when(projectRepository.findByIdAndActiveTrue(projectId)).thenReturn(Optional.of(project));
         when(userRepository.findByIdAndActiveTrue(invalidAssigneeId)).thenReturn(Optional.empty());
@@ -167,9 +157,7 @@ class CreateTaskHandlerTest {
         project.setActive(true);
         project.setMembers(Collections.emptyList()); // Assignee não é membro
 
-        CreateTaskRequest request = new CreateTaskRequest();
-        request.setProjectId(projectId);
-        request.setAssigneeId(assigneeId);
+        CreateTaskRequest request = new CreateTaskRequest(null, null, null, null, projectId, assigneeId);
 
         when(projectRepository.findByIdAndActiveTrue(projectId)).thenReturn(Optional.of(project));
         when(userRepository.findByIdAndActiveTrue(assigneeId)).thenReturn(Optional.of(assignee));
@@ -202,9 +190,7 @@ class CreateTaskHandlerTest {
 
         project.setMembers(List.of(member));
 
-        CreateTaskRequest request = new CreateTaskRequest();
-        request.setProjectId(projectId);
-        request.setAssigneeId(assigneeId);
+        CreateTaskRequest request = new CreateTaskRequest(null, null, null, null, projectId, assigneeId);
 
         when(projectRepository.findByIdAndActiveTrue(projectId)).thenReturn(Optional.of(project));
         when(userRepository.findByIdAndActiveTrue(assigneeId)).thenReturn(Optional.of(assignee));
@@ -238,10 +224,7 @@ class CreateTaskHandlerTest {
 
         project.setMembers(List.of(member));
 
-        CreateTaskRequest request = new CreateTaskRequest();
-        request.setProjectId(projectId);
-        request.setAssigneeId(assigneeId);
-        request.setTitle("New Task");
+        CreateTaskRequest request = new CreateTaskRequest("New Task", null, null, null, projectId, assigneeId);
 
         Task savedTask = new Task();
         savedTask.setId(1L);

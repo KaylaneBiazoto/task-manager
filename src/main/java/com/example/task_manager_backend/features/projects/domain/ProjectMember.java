@@ -16,10 +16,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "project_members")
 public class ProjectMember extends BaseAuditableEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
@@ -30,8 +26,5 @@ public class ProjectMember extends BaseAuditableEntity {
 
     @Column(nullable = false)
     private String projectRole;
-
-    @Column(nullable = false)
-    private Boolean active = true;
 }
 

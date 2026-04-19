@@ -18,12 +18,12 @@ public class UpdateProjectHandler {
         Project project = projectRepository.findByIdAndActiveTrue(projectId)
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
 
-        if (request.getName() != null && !request.getName().isBlank()) {
-            project.setName(request.getName());
+        if (request.name() != null && !request.name().isBlank()) {
+            project.setName(request.name());
         }
 
-        if (request.getDescription() != null) {
-            project.setDescription(request.getDescription());
+        if (request.description() != null) {
+            project.setDescription(request.description());
         }
 
         return projectRepository.save(project);

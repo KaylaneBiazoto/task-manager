@@ -18,10 +18,6 @@ import java.util.List;
 @Table(name = "projects")
 public class Project extends BaseAuditableEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(nullable = false, length = 150)
     private String name;
 
@@ -33,9 +29,6 @@ public class Project extends BaseAuditableEntity {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProjectMember> members;
-
-    @Column(nullable = false)
-    private Boolean active = true;
 
     @Column(nullable = false)
     private Long ownerId;

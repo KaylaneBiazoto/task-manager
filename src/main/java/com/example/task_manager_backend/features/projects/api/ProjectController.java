@@ -24,7 +24,7 @@ public class ProjectController {
     @PostMapping
     public ResponseEntity<ApiResponse<ProjectDto>> createProject(
             @Valid @RequestBody CreateProjectRequest request) {
-        ProjectDto project = projectService.createProject(request, request.getOwnerId());
+        ProjectDto project = projectService.createProject(request, request.ownerId());
         ApiResponse<ProjectDto> response = new ApiResponse<>(true, "Project created successfully", project);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

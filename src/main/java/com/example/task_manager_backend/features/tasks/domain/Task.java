@@ -6,6 +6,7 @@ import com.example.task_manager_backend.infrastructure.persistence.BaseAuditable
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -14,12 +15,9 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "tasks")
 public class Task extends BaseAuditableEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @Column(nullable = false, length = 200)
     private String title;
@@ -45,7 +43,4 @@ public class Task extends BaseAuditableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignee_id")
     private User assignee;
-
-    @Column(nullable = false)
-    private Boolean active = true;
 }

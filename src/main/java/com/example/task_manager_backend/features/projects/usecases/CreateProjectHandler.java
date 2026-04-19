@@ -32,8 +32,8 @@ public class CreateProjectHandler {
 
         // Criar projeto
         Project project = new Project();
-        project.setName(request.getName());
-        project.setDescription(request.getDescription());
+        project.setName(request.name());
+        project.setDescription(request.description());
         project.setActive(true);
         project.setOwnerId(owner.getId());
 

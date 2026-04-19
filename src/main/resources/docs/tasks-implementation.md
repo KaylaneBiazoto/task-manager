@@ -49,8 +49,8 @@ A entidade `Task` contém os seguintes campos:
 | `project` | Project | Projeto ao qual pertence | Sim |
 | `assignee` | User | Usuário responsável | Sim |
 | `active` | Boolean | Indicador de ativo/deletado | Sim (default: true) |
-| `createdAt` | LocalDateTime | Data de criação | Sim (auto) |
-| `updatedAt` | LocalDateTime | Data de última atualização | Sim (auto) |
+| `createdAt` | ZonedDateTime | Data de criação | Sim (auto) |
+| `updatedAt` | ZonedDateTime | Data de última atualização | Sim (auto) |
 
 ## Enums
 

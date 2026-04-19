@@ -20,36 +20,36 @@ public class UpdateUserHandler {
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
         // Update username if provided and unique
-        if (request.getUsername() != null && !request.getUsername().isBlank()) {
-            if (!request.getUsername().equals(user.getUsername())) {
-                if (userRepository.findByUsernameAndActiveTrue(request.getUsername()).isPresent()) {
+        if (request.username() != null && !request.username().isBlank()) {
+            if (!request.username().equals(user.getUsername())) {
+                if (userRepository.findByUsernameAndActiveTrue(request.username()).isPresent()) {
                     throw new UserBusinessException("Username already taken");
                 }
-                user.setUsername(request.getUsername());
+                user.setUsername(request.username());
             }
         }
 
         // Update email if provided and unique
-        if (request.getEmail() != null && !request.getEmail().isBlank()) {
-            if (!request.getEmail().equals(user.getEmail())) {
-                if (userRepository.findByEmailAndActiveTrue(request.getEmail()).isPresent()) {
+        if (request.email() != null && !request.email().isBlank()) {
+            if (!request.email().equals(user.getEmail())) {
+                if (userRepository.findByEmailAndActiveTrue(request.email()).isPresent()) {
                     throw new UserBusinessException("Email already registered");
                 }
-                user.setEmail(request.getEmail());
+                user.setEmail(request.email());
             }
         }
 
         // Update password if provided
-        if (request.getPassword() != null && !request.getPassword().isBlank()) {
-            user.setPassword(request.getPassword()); // TODO: Implement password hashing with JWT implementation
+        if (request.password() != null && !request.password().isBlank()) {
+            user.setPassword(request.password()); // TODO: Implement password hashing with JWT implementation
         }
 
         // Update role if provided
-        if (request.getRole() != null && !request.getRole().isBlank()) {
-            if (!request.getRole().equals("ADMIN") && !request.getRole().equals("MEMBER")) {
+        if (request.role() != null && !request.role().isBlank()) {
+            if (!request.role().equals("ADMIN") && !request.role().equals("MEMBER")) {
                 throw new UserBusinessException("Invalid role. Must be ADMIN or MEMBER");
             }
-            user.setRole(request.getRole());
+            user.setRole(request.role());
         }
 
         return userRepository.save(user);
