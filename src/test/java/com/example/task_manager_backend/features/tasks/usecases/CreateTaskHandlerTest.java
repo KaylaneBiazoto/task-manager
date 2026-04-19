@@ -5,8 +5,8 @@ import com.example.task_manager_backend.features.auth.repositories.UserRepositor
 import com.example.task_manager_backend.features.projects.domain.Project;
 import com.example.task_manager_backend.features.projects.domain.ProjectMember;
 import com.example.task_manager_backend.features.projects.repositories.ProjectRepository;
-import com.example.task_manager_backend.features.tasks.core.CreateTaskRequest;
-import com.example.task_manager_backend.features.tasks.core.TaskBusinessException;
+import com.example.task_manager_backend.features.tasks.core.dto.CreateTaskRequest;
+import com.example.task_manager_backend.features.tasks.core.exception.TaskBusinessException;
 import com.example.task_manager_backend.features.tasks.domain.Task;
 import com.example.task_manager_backend.features.tasks.domain.TaskPriority;
 import com.example.task_manager_backend.features.tasks.domain.TaskStatus;
@@ -18,10 +18,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -49,8 +49,9 @@ class CreateTaskHandlerTest {
     @Test
     void testExecute_WithValidRequest_ShouldCreateTask() {
         // Arrange
-        Long projectId = 1L;
-        Long assigneeId = 2L;
+        UUID projectId = UUID.randomUUID();
+        UUID assigneeId = UUID.randomUUID();
+        UUID taskId = UUID.randomUUID();
         String taskTitle = "Test Task";
         TaskPriority priority = TaskPriority.HIGH;
         LocalDate deadline = LocalDate.now().plusDays(7);
@@ -74,7 +75,7 @@ class CreateTaskHandlerTest {
         CreateTaskRequest request = new CreateTaskRequest(taskTitle, "Test Description", priority, deadline, projectId, assigneeId);
 
         Task savedTask = new Task();
-        savedTask.setId(1L);
+        savedTask.setId(taskId);
         savedTask.setTitle(taskTitle);
         savedTask.setProject(project);
         savedTask.setAssignee(assignee);
@@ -91,7 +92,7 @@ class CreateTaskHandlerTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.getId()).isEqualTo(taskId);
         assertThat(result.getTitle()).isEqualTo(taskTitle);
         assertThat(result.getStatus()).isEqualTo(TaskStatus.TODO);
         assertThat(result.getActive()).isTrue();
@@ -104,8 +105,9 @@ class CreateTaskHandlerTest {
     @Test
     void testExecute_WithInvalidProject_ShouldThrowTaskBusinessException() {
         // Arrange
-        Long invalidProjectId = 999L;
-        CreateTaskRequest request = new CreateTaskRequest(null, null, null, null, invalidProjectId, 1L);
+        UUID invalidProjectId = UUID.randomUUID();
+        UUID assigneeId = UUID.randomUUID();
+        CreateTaskRequest request = new CreateTaskRequest(null, null, null, null, invalidProjectId, assigneeId);
 
         when(projectRepository.findByIdAndActiveTrue(invalidProjectId)).thenReturn(Optional.empty());
 
@@ -115,15 +117,15 @@ class CreateTaskHandlerTest {
                 .hasMessage("Project not found");
 
         verify(projectRepository).findByIdAndActiveTrue(invalidProjectId);
-        verify(userRepository, never()).findByIdAndActiveTrue(any());
+        verify(userRepository, never()).findByIdAndActiveTrue(any(UUID.class));
         verify(taskRepository, never()).save(any());
     }
 
     @Test
     void testExecute_WithInvalidAssignee_ShouldThrowTaskBusinessException() {
         // Arrange
-        Long projectId = 1L;
-        Long invalidAssigneeId = 999L;
+        UUID projectId = UUID.randomUUID();
+        UUID invalidAssigneeId = UUID.randomUUID();
 
         Project project = new Project();
         project.setId(projectId);
@@ -145,8 +147,8 @@ class CreateTaskHandlerTest {
     @Test
     void testExecute_WithAssigneeNotProjectMember_ShouldThrowTaskBusinessException() {
         // Arrange
-        Long projectId = 1L;
-        Long assigneeId = 2L;
+        UUID projectId = UUID.randomUUID();
+        UUID assigneeId = UUID.randomUUID();
 
         User assignee = new User();
         assignee.setId(assigneeId);
@@ -155,7 +157,7 @@ class CreateTaskHandlerTest {
         Project project = new Project();
         project.setId(projectId);
         project.setActive(true);
-        project.setMembers(Collections.emptyList()); // Assignee não é membro
+        project.setMembers(Collections.emptyList());
 
         CreateTaskRequest request = new CreateTaskRequest(null, null, null, null, projectId, assigneeId);
 
@@ -173,8 +175,8 @@ class CreateTaskHandlerTest {
     @Test
     void testExecute_WithWipLimitExceeded_ShouldThrowTaskBusinessException() {
         // Arrange
-        Long projectId = 1L;
-        Long assigneeId = 2L;
+        UUID projectId = UUID.randomUUID();
+        UUID assigneeId = UUID.randomUUID();
 
         User assignee = new User();
         assignee.setId(assigneeId);
@@ -207,8 +209,9 @@ class CreateTaskHandlerTest {
     @Test
     void testExecute_WithAssigneeHaving4InProgressTasks_ShouldCreateTask() {
         // Arrange
-        Long projectId = 1L;
-        Long assigneeId = 2L;
+        UUID projectId = UUID.randomUUID();
+        UUID assigneeId = UUID.randomUUID();
+        UUID taskId = UUID.randomUUID();
 
         User assignee = new User();
         assignee.setId(assigneeId);
@@ -227,7 +230,7 @@ class CreateTaskHandlerTest {
         CreateTaskRequest request = new CreateTaskRequest("New Task", null, null, null, projectId, assigneeId);
 
         Task savedTask = new Task();
-        savedTask.setId(1L);
+        savedTask.setId(taskId);
         savedTask.setTitle("New Task");
         savedTask.setStatus(TaskStatus.TODO);
         savedTask.setActive(true);
@@ -242,7 +245,7 @@ class CreateTaskHandlerTest {
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.getId()).isEqualTo(taskId);
         verify(taskRepository).save(any(Task.class));
     }
 }

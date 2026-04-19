@@ -1,10 +1,11 @@
 package com.example.task_manager_backend.features.projects.usecases;
+import java.util.UUID;
 
 import com.example.task_manager_backend.features.auth.domain.User;
 import com.example.task_manager_backend.features.auth.repositories.UserRepository;
-import com.example.task_manager_backend.features.projects.core.AddProjectMemberRequest;
-import com.example.task_manager_backend.features.projects.core.ProjectBusinessException;
-import com.example.task_manager_backend.features.projects.core.ProjectNotFoundException;
+import com.example.task_manager_backend.features.projects.core.dto.AddProjectMemberRequest;
+import com.example.task_manager_backend.features.projects.core.exception.ProjectBusinessException;
+import com.example.task_manager_backend.features.projects.core.exception.ProjectNotFoundException;
 import com.example.task_manager_backend.features.projects.domain.Project;
 import com.example.task_manager_backend.features.projects.domain.ProjectMember;
 import com.example.task_manager_backend.features.projects.repositories.ProjectRepository;
@@ -26,7 +27,7 @@ public class AddProjectMemberHandler {
         this.userRepository = userRepository;
     }
 
-    public ProjectMember execute(Long projectId, AddProjectMemberRequest request) {
+    public ProjectMember execute(UUID projectId, AddProjectMemberRequest request) {
         // Validar projeto
         Project project = projectRepository.findByIdAndActiveTrue(projectId)
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found"));

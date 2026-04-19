@@ -5,9 +5,9 @@ import com.example.task_manager_backend.features.auth.repositories.UserRepositor
 import com.example.task_manager_backend.features.projects.domain.Project;
 import com.example.task_manager_backend.features.projects.domain.ProjectMember;
 import com.example.task_manager_backend.features.projects.repositories.ProjectRepository;
-import com.example.task_manager_backend.features.tasks.core.TaskBusinessException;
-import com.example.task_manager_backend.features.tasks.core.TaskNotFoundException;
-import com.example.task_manager_backend.features.tasks.core.UpdateTaskRequest;
+import com.example.task_manager_backend.features.tasks.core.exception.TaskBusinessException;
+import com.example.task_manager_backend.features.tasks.core.exception.TaskNotFoundException;
+import com.example.task_manager_backend.features.tasks.core.dto.UpdateTaskRequest;
 import com.example.task_manager_backend.features.tasks.domain.Task;
 import com.example.task_manager_backend.features.tasks.domain.TaskPriority;
 import com.example.task_manager_backend.features.tasks.domain.TaskStatus;
@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -48,15 +49,15 @@ class UpdateTaskHandlerTest {
     @Test
     void testExecute_UpdateTaskStatus_ShouldSucceed() {
         // Arrange
-        Long taskId = 1L;
-        Long assigneeId = 2L;
+        UUID taskId = UUID.randomUUID();
+        UUID assigneeId = UUID.randomUUID();
 
         User assignee = new User();
         assignee.setId(assigneeId);
         assignee.setActive(true);
 
         Project project = new Project();
-        project.setId(1L);
+        project.setId(UUID.randomUUID());
         project.setActive(true);
 
         Task task = new Task();
@@ -79,7 +80,7 @@ class UpdateTaskHandlerTest {
         when(taskRepository.save(any(Task.class))).thenReturn(updatedTask);
 
         // Act
-        Task result = handler.execute(taskId, request, 1L, "ADMIN");
+        Task result = handler.execute(taskId, request, UUID.randomUUID(), "ADMIN");
 
         // Assert
         assertThat(result.getStatus()).isEqualTo(TaskStatus.IN_PROGRESS);
@@ -89,13 +90,13 @@ class UpdateTaskHandlerTest {
     @Test
     void testExecute_WithTaskNotFound_ShouldThrowTaskNotFoundException() {
         // Arrange
-        Long invalidTaskId = 999L;
+        UUID invalidTaskId = UUID.randomUUID();
         UpdateTaskRequest request = new UpdateTaskRequest(null, null, null, null, null, null);
 
         when(taskRepository.findByIdAndActiveTrue(invalidTaskId)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThatThrownBy(() -> handler.execute(invalidTaskId, request, 1L, "ADMIN"))
+        assertThatThrownBy(() -> handler.execute(invalidTaskId, request, UUID.randomUUID(), "ADMIN"))
                 .isInstanceOf(TaskNotFoundException.class)
                 .hasMessage("Task not found");
 
@@ -105,12 +106,12 @@ class UpdateTaskHandlerTest {
     @Test
     void testExecute_DoneTaskToTodo_ShouldThrowTaskBusinessException() {
         // Arrange
-        Long taskId = 1L;
+        UUID taskId = UUID.randomUUID();
         User assignee = new User();
-        assignee.setId(1L);
+        assignee.setId(UUID.randomUUID());
 
         Project project = new Project();
-        project.setId(1L);
+        project.setId(UUID.randomUUID());
 
         Task task = new Task();
         task.setId(taskId);
@@ -125,7 +126,7 @@ class UpdateTaskHandlerTest {
         when(taskRepository.findByIdAndActiveTrue(taskId)).thenReturn(Optional.of(task));
 
         // Act & Assert
-        assertThatThrownBy(() -> handler.execute(taskId, request, 1L, "ADMIN"))
+        assertThatThrownBy(() -> handler.execute(taskId, request, UUID.randomUUID(), "ADMIN"))
                 .isInstanceOf(TaskBusinessException.class)
                 .hasMessage("A task with DONE status cannot return to TODO. Only IN_PROGRESS is allowed.");
 
@@ -135,12 +136,12 @@ class UpdateTaskHandlerTest {
     @Test
     void testExecute_DoneTaskToInProgress_ShouldSucceed() {
         // Arrange
-        Long taskId = 1L;
+        UUID taskId = UUID.randomUUID();
         User assignee = new User();
-        assignee.setId(1L);
+        assignee.setId(UUID.randomUUID());
 
         Project project = new Project();
-        project.setId(1L);
+        project.setId(UUID.randomUUID());
 
         Task task = new Task();
         task.setId(taskId);
@@ -159,7 +160,7 @@ class UpdateTaskHandlerTest {
         when(taskRepository.save(any(Task.class))).thenReturn(updatedTask);
 
         // Act
-        Task result = handler.execute(taskId, request, 1L, "ADMIN");
+        Task result = handler.execute(taskId, request, UUID.randomUUID(), "ADMIN");
 
         // Assert
         assertThat(result.getStatus()).isEqualTo(TaskStatus.IN_PROGRESS);
@@ -169,12 +170,12 @@ class UpdateTaskHandlerTest {
     @Test
     void testExecute_CriticalTaskClosedByAdmin_ShouldSucceed() {
         // Arrange
-        Long taskId = 1L;
+        UUID taskId = UUID.randomUUID();
         User assignee = new User();
-        assignee.setId(1L);
+        assignee.setId(UUID.randomUUID());
 
         Project project = new Project();
-        project.setId(1L);
+        project.setId(UUID.randomUUID());
 
         Task task = new Task();
         task.setId(taskId);
@@ -193,7 +194,7 @@ class UpdateTaskHandlerTest {
         when(taskRepository.save(any(Task.class))).thenReturn(updatedTask);
 
         // Act
-        Task result = handler.execute(taskId, request, 1L, "ADMIN");
+        Task result = handler.execute(taskId, request, UUID.randomUUID(), "ADMIN");
 
         // Assert
         assertThat(result.getStatus()).isEqualTo(TaskStatus.DONE);
@@ -203,12 +204,12 @@ class UpdateTaskHandlerTest {
     @Test
     void testExecute_CriticalTaskClosedByMember_ShouldThrowTaskBusinessException() {
         // Arrange
-        Long taskId = 1L;
+        UUID taskId = UUID.randomUUID();
         User assignee = new User();
-        assignee.setId(1L);
+        assignee.setId(UUID.randomUUID());
 
         Project project = new Project();
-        project.setId(1L);
+        project.setId(UUID.randomUUID());
 
         Task task = new Task();
         task.setId(taskId);
@@ -223,7 +224,7 @@ class UpdateTaskHandlerTest {
         when(taskRepository.findByIdAndActiveTrue(taskId)).thenReturn(Optional.of(task));
 
         // Act & Assert
-        assertThatThrownBy(() -> handler.execute(taskId, request, 1L, "MEMBER"))
+        assertThatThrownBy(() -> handler.execute(taskId, request, UUID.randomUUID(), "MEMBER"))
                 .isInstanceOf(TaskBusinessException.class)
                 .hasMessage("Only project ADMIN can mark CRITICAL priority tasks as DONE");
 
@@ -233,9 +234,9 @@ class UpdateTaskHandlerTest {
     @Test
     void testExecute_ChangeAssignee_ShouldSucceed() {
         // Arrange
-        Long taskId = 1L;
-        Long oldAssigneeId = 1L;
-        Long newAssigneeId = 2L;
+        UUID taskId = UUID.randomUUID();
+        UUID oldAssigneeId = UUID.randomUUID();
+        UUID newAssigneeId = UUID.randomUUID();
 
         User oldAssignee = new User();
         oldAssignee.setId(oldAssigneeId);
@@ -245,7 +246,7 @@ class UpdateTaskHandlerTest {
         newAssignee.setActive(true);
 
         Project project = new Project();
-        project.setId(1L);
+        project.setId(UUID.randomUUID());
 
         ProjectMember memberNew = new ProjectMember();
         memberNew.setUser(newAssignee);
@@ -272,7 +273,7 @@ class UpdateTaskHandlerTest {
         when(taskRepository.save(any(Task.class))).thenReturn(updatedTask);
 
         // Act
-        Task result = handler.execute(taskId, request, 1L, "ADMIN");
+        Task result = handler.execute(taskId, request, UUID.randomUUID(), "ADMIN");
 
         // Assert
         assertThat(result.getAssignee()).isEqualTo(newAssignee);
@@ -282,18 +283,18 @@ class UpdateTaskHandlerTest {
     @Test
     void testExecute_ChangeAssigneeNotProjectMember_ShouldThrowTaskBusinessException() {
         // Arrange
-        Long taskId = 1L;
-        Long newAssigneeId = 2L;
+        UUID taskId = UUID.randomUUID();
+        UUID newAssigneeId = UUID.randomUUID();
 
         User oldAssignee = new User();
-        oldAssignee.setId(1L);
+        oldAssignee.setId(UUID.randomUUID());
 
         User newAssignee = new User();
         newAssignee.setId(newAssigneeId);
         newAssignee.setActive(true);
 
         Project project = new Project();
-        project.setId(1L);
+        project.setId(UUID.randomUUID());
         project.setMembers(List.of()); // New assignee is not a member
 
         Task task = new Task();
@@ -310,7 +311,7 @@ class UpdateTaskHandlerTest {
         when(userRepository.findByIdAndActiveTrue(newAssigneeId)).thenReturn(Optional.of(newAssignee));
 
         // Act & Assert
-        assertThatThrownBy(() -> handler.execute(taskId, request, 1L, "ADMIN"))
+        assertThatThrownBy(() -> handler.execute(taskId, request, UUID.randomUUID(), "ADMIN"))
                 .isInstanceOf(TaskBusinessException.class)
                 .hasMessage("Assignee is not a member of the project");
 
@@ -320,16 +321,16 @@ class UpdateTaskHandlerTest {
     @Test
     void testExecute_UpdateMultipleFields_ShouldSucceed() {
         // Arrange
-        Long taskId = 1L;
+        UUID taskId = UUID.randomUUID();
         String newTitle = "Updated Title";
         TaskPriority newPriority = TaskPriority.CRITICAL;
         LocalDate newDeadline = LocalDate.now().plusDays(15);
 
         User assignee = new User();
-        assignee.setId(1L);
+        assignee.setId(UUID.randomUUID());
 
         Project project = new Project();
-        project.setId(1L);
+        project.setId(UUID.randomUUID());
 
         Task task = new Task();
         task.setId(taskId);
@@ -352,7 +353,7 @@ class UpdateTaskHandlerTest {
         when(taskRepository.save(any(Task.class))).thenReturn(updatedTask);
 
         // Act
-        Task result = handler.execute(taskId, request, 1L, "ADMIN");
+        Task result = handler.execute(taskId, request, UUID.randomUUID(), "ADMIN");
 
         // Assert
         assertThat(result.getTitle()).isEqualTo(newTitle);

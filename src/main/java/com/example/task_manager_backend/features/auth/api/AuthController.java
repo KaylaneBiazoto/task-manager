@@ -1,9 +1,9 @@
 package com.example.task_manager_backend.features.auth.api;
 
 import com.example.task_manager_backend.core.dto.ApiResponse;
-import com.example.task_manager_backend.features.auth.core.CreateUserRequest;
-import com.example.task_manager_backend.features.auth.core.UpdateUserRequest;
-import com.example.task_manager_backend.features.auth.core.UserDto;
+import com.example.task_manager_backend.features.auth.core.dto.CreateUserRequest;
+import com.example.task_manager_backend.features.auth.core.dto.UpdateUserRequest;
+import com.example.task_manager_backend.features.auth.core.dto.UserDto;
 import com.example.task_manager_backend.features.auth.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
@@ -30,7 +32,7 @@ public class AuthController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<ApiResponse<UserDto>> getUser(@PathVariable Long userId) {
+    public ResponseEntity<ApiResponse<UserDto>> getUser(@PathVariable UUID userId) {
         UserDto user = userService.getUserById(userId);
         ApiResponse<UserDto> response = new ApiResponse<>(true, "User retrieved successfully", user);
         return ResponseEntity.ok(response);
@@ -48,7 +50,7 @@ public class AuthController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<ApiResponse<UserDto>> updateUser(
-            @PathVariable Long userId,
+            @PathVariable UUID userId,
             @Valid @RequestBody UpdateUserRequest request) {
         UserDto user = userService.updateUser(userId, request);
         ApiResponse<UserDto> response = new ApiResponse<>(true, "User updated successfully", user);
@@ -56,7 +58,7 @@ public class AuthController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable UUID userId) {
         userService.deleteUser(userId);
         ApiResponse<Void> response = new ApiResponse<>(true, "User deleted successfully", null);
         return ResponseEntity.ok(response);

@@ -1,7 +1,7 @@
 package com.example.task_manager_backend.features.projects.domain;
 
 import com.example.task_manager_backend.features.auth.domain.User;
-import com.example.task_manager_backend.infrastructure.persistence.BaseAuditableEntity;
+import com.example.task_manager_backend.infrastructure.persistence.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "project_members")
-public class ProjectMember extends BaseAuditableEntity {
+public class ProjectMember extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)

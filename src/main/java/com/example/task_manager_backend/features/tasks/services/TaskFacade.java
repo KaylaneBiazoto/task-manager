@@ -1,8 +1,8 @@
 package com.example.task_manager_backend.features.tasks.services;
 
-import com.example.task_manager_backend.features.tasks.core.CreateTaskRequest;
-import com.example.task_manager_backend.features.tasks.core.TaskDto;
-import com.example.task_manager_backend.features.tasks.core.UpdateTaskRequest;
+import com.example.task_manager_backend.features.tasks.core.dto.CreateTaskRequest;
+import com.example.task_manager_backend.features.tasks.core.dto.TaskDto;
+import com.example.task_manager_backend.features.tasks.core.dto.UpdateTaskRequest;
 import com.example.task_manager_backend.features.tasks.domain.Task;
 import com.example.task_manager_backend.features.tasks.usecases.*;
 import org.springframework.data.domain.Page;
@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,12 +42,12 @@ public class TaskFacade {
         return mapToDto(task);
     }
 
-    public TaskDto getTaskById(Long taskId) {
+    public TaskDto getTaskById(UUID taskId) {
         Task task = getTaskByIdHandler.execute(taskId);
         return mapToDto(task);
     }
 
-    public List<TaskDto> listTasksByProject(Long projectId) {
+    public List<TaskDto> listTasksByProject(UUID projectId) {
         List<Task> tasks = listTasksByProjectHandler.execute(projectId);
         return tasks.stream()
                 .map(this::mapToDto)
@@ -54,28 +55,28 @@ public class TaskFacade {
     }
     
     public Page<TaskDto> listTasksByProjectWithFilters(
-            Long projectId,
+            UUID projectId,
             String search,
             String status,
             String priority,
-            Long assigneeId,
+            UUID assigneeId,
             Pageable pageable) {
         Page<Task> tasks = listTasksHandler.executeByProjectWithFilters(
                 projectId, search, status, priority, assigneeId, pageable);
         return tasks.map(this::mapToDto);
     }
 
-    public TaskDto updateTask(Long taskId, UpdateTaskRequest request, Long currentUserId, String currentUserRole) {
+    public TaskDto updateTask(UUID taskId, UpdateTaskRequest request, UUID currentUserId, String currentUserRole) {
         Task task = updateTaskHandler.execute(taskId, request, currentUserId, currentUserRole);
         return mapToDto(task);
     }
 
-    public void deleteTask(Long taskId) {
+    public void deleteTask(UUID taskId) {
         deleteTaskHandler.execute(taskId);
     }
 
     private TaskDto mapToDto(Task task) {
-        Long assigneeId = null;
+        UUID assigneeId = null;
         String assigneeName = null;
         if (task.getAssignee() != null) {
             assigneeId = task.getAssignee().getId();

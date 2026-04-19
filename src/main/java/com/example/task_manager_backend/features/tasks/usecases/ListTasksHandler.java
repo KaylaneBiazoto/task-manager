@@ -1,4 +1,5 @@
 package com.example.task_manager_backend.features.tasks.usecases;
+import java.util.UUID;
 
 import com.example.task_manager_backend.features.tasks.domain.Task;
 import com.example.task_manager_backend.features.tasks.domain.TaskStatus;
@@ -15,17 +16,13 @@ public class ListTasksHandler {
     public ListTasksHandler(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
-
-    public Page<Task> executeByProject(Long projectId, Pageable pageable) {
-        return taskRepository.findByProjectIdActive(projectId, pageable);
-    }
     
     public Page<Task> executeByProjectWithFilters(
-            Long projectId,
+            UUID projectId,
             String search,
             String status,
             String priority,
-            Long assigneeId,
+            UUID assigneeId,
             Pageable pageable) {
         
         TaskStatus taskStatus = null;
@@ -33,7 +30,6 @@ public class ListTasksHandler {
             try {
                 taskStatus = TaskStatus.valueOf(status.toUpperCase());
             } catch (IllegalArgumentException e) {
-                // Invalid status, will be treated as null
             }
         }
         
@@ -42,7 +38,6 @@ public class ListTasksHandler {
             try {
                 taskPriority = TaskPriority.valueOf(priority.toUpperCase());
             } catch (IllegalArgumentException e) {
-                // Invalid priority, will be treated as null
             }
         }
         

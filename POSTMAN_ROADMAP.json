@@ -1,0 +1,1772 @@
+{
+  "info": {
+    "name": "Task Manager Backend - Complete Test Roadmap",
+    "description": "Comprehensive test collection for all requirements and business rules",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1️⃣ AUTENTICAÇÃO E AUTORIZAÇÃO",
+      "description": "Testa login, JWT, perfis (ADMIN/MEMBER) e acesso a recursos",
+      "item": [
+        {
+          "name": "1.1 - Registro de novo usuário ADMIN",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin_user\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"AdminPassword123!\",\n  \"role\": \"ADMIN\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["auth", "register"]
+            },
+            "description": "✅ Resultado esperado: Status 201, usuário criado com role ADMIN"
+          },
+          "response": []
+        },
+        {
+          "name": "1.2 - Registro de novo usuário MEMBER",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"member_user1\",\n  \"email\": \"member1@example.com\",\n  \"password\": \"MemberPassword123!\",\n  \"role\": \"MEMBER\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["auth", "register"]
+            },
+            "description": "✅ Resultado esperado: Status 201, usuário criado com role MEMBER"
+          },
+          "response": []
+        },
+        {
+          "name": "1.3 - Registro de segundo MEMBER",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"member_user2\",\n  \"email\": \"member2@example.com\",\n  \"password\": \"MemberPassword123!\",\n  \"role\": \"MEMBER\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["auth", "register"]
+            },
+            "description": "✅ Resultado esperado: Status 201"
+          },
+          "response": []
+        },
+        {
+          "name": "1.4 - Login com credenciais válidas (ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"AdminPassword123!\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["auth", "login"]
+            },
+            "description": "✅ Resultado esperado: Status 200, retorna JWT token\n\n💾 SALVAR TOKEN COMO VARIÁVEL: {{admin_token}}"
+          },
+          "response": []
+        },
+        {
+          "name": "1.5 - Login com credenciais válidas (MEMBER)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"member1@example.com\",\n  \"password\": \"MemberPassword123!\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["auth", "login"]
+            },
+            "description": "✅ Resultado esperado: Status 200, retorna JWT token\n\n💾 SALVAR TOKEN COMO VARIÁVEL: {{member_token}}"
+          },
+          "response": []
+        },
+        {
+          "name": "1.6 - Login com email inválido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"nonexistent@example.com\",\n  \"password\": \"SomePassword123!\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["auth", "login"]
+            },
+            "description": "❌ Resultado esperado: Status 401 - Erro de autenticação"
+          },
+          "response": []
+        },
+        {
+          "name": "1.7 - Login com senha incorreta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"WrongPassword123!\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["auth", "login"]
+            },
+            "description": "❌ Resultado esperado: Status 401 - Erro de autenticação"
+          },
+          "response": []
+        },
+        {
+          "name": "1.8 - Email duplicado no registro",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"another_admin\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"AnotherPassword123!\",\n  \"role\": \"ADMIN\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["auth", "register"]
+            },
+            "description": "❌ Resultado esperado: Status 400 - Email already registered"
+          },
+          "response": []
+        },
+        {
+          "name": "1.9 - Username duplicado no registro",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin_user\",\n  \"email\": \"newemail@example.com\",\n  \"password\": \"AnotherPassword123!\",\n  \"role\": \"ADMIN\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["auth", "register"]
+            },
+            "description": "❌ Resultado esperado: Status 400 - Username already taken"
+          },
+          "response": []
+        },
+        {
+          "name": "1.10 - Registro com role inválida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"invalid_role_user\",\n  \"email\": \"invalidrole@example.com\",\n  \"password\": \"InvalidRolePassword123!\",\n  \"role\": \"SUPERUSER\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["auth", "register"]
+            },
+            "description": "❌ Resultado esperado: Status 400 - Invalid role. Must be ADMIN or MEMBER"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2️⃣ PROJETOS - CRUD E GERENCIAMENTO DE MEMBROS",
+      "description": "Testa criação, leitura, atualização e exclusão de projetos, gerenciamento de membros e permissões",
+      "item": [
+        {
+          "name": "2.1 - Criar projeto (por ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Projeto Alpha\",\n  \"description\": \"Primeiro projeto de teste\",\n  \"ownerId\": \"REPLACE_WITH_ADMIN_ID\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/projects",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects"]
+            },
+            "description": "✅ Resultado esperado: Status 201, projeto criado com dono = ADMIN\n\n💾 SALVAR ID: {{project_alpha_id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "2.2 - Criar segundo projeto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Projeto Beta\",\n  \"description\": \"Segundo projeto de teste\",\n  \"ownerId\": \"REPLACE_WITH_ADMIN_ID\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/projects",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects"]
+            },
+            "description": "✅ Resultado esperado: Status 201\n\n💾 SALVAR ID: {{project_beta_id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "2.3 - Obter projeto por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/projects/{{project_alpha_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects", "{{project_alpha_id}}"]
+            },
+            "description": "✅ Resultado esperado: Status 200, retorna dados do projeto"
+          },
+          "response": []
+        },
+        {
+          "name": "2.4 - Listar todos os projetos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/projects?page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, retorna lista paginada de projetos"
+          },
+          "response": []
+        },
+        {
+          "name": "2.5 - Filtrar projetos por nome",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/projects?search=Alpha&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Alpha"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, retorna apenas projetos com 'Alpha' no nome"
+          },
+          "response": []
+        },
+        {
+          "name": "2.6 - Atualizar projeto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Projeto Alpha Atualizado\",\n  \"description\": \"Descrição atualizada do primeiro projeto\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/projects/{{project_alpha_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects", "{{project_alpha_id}}"]
+            },
+            "description": "✅ Resultado esperado: Status 200, projeto atualizado"
+          },
+          "response": []
+        },
+        {
+          "name": "2.7 - Adicionar membro ao projeto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"REPLACE_WITH_MEMBER1_ID\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/projects/{{project_alpha_id}}/members",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects", "{{project_alpha_id}}", "members"]
+            },
+            "description": "✅ Resultado esperado: Status 201, membro adicionado ao projeto"
+          },
+          "response": []
+        },
+        {
+          "name": "2.8 - Adicionar segundo membro ao projeto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"REPLACE_WITH_MEMBER2_ID\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/projects/{{project_alpha_id}}/members",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects", "{{project_alpha_id}}", "members"]
+            },
+            "description": "✅ Resultado esperado: Status 201, segundo membro adicionado"
+          },
+          "response": []
+        },
+        {
+          "name": "2.9 - Listar membros do projeto",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/projects/{{project_alpha_id}}/members",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects", "{{project_alpha_id}}", "members"]
+            },
+            "description": "✅ Resultado esperado: Status 200, retorna lista de membros do projeto"
+          },
+          "response": []
+        },
+        {
+          "name": "2.10 - Deletar projeto (soft delete)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/projects/{{project_beta_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects", "{{project_beta_id}}"]
+            },
+            "description": "✅ Resultado esperado: Status 200, projeto deletado (soft delete)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3️⃣ TAREFAS - CRUD COM REGRAS DE NEGÓCIO",
+      "description": "Testa CRUD de tarefas e regras de negócio complexas",
+      "item": [
+        {
+          "name": "3.1 - Criar tarefa TODO",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"projectId\": \"{{project_alpha_id}}\",\n  \"title\": \"Tarefa 1 - Desenvolvimento\",\n  \"description\": \"Implementar feature de autenticação\",\n  \"priority\": \"HIGH\",\n  \"assigneeId\": \"REPLACE_WITH_MEMBER1_ID\",\n  \"deadline\": \"2026-05-31T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks"]
+            },
+            "description": "✅ Resultado esperado: Status 201, tarefa criada com status=TODO\n\n💾 SALVAR ID: {{task1_id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "3.2 - Criar tarefa com prioridade CRITICAL",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"projectId\": \"{{project_alpha_id}}\",\n  \"title\": \"Bug crítico em produção\",\n  \"description\": \"Corrigir bug que impede login\",\n  \"priority\": \"CRITICAL\",\n  \"assigneeId\": \"REPLACE_WITH_MEMBER1_ID\",\n  \"deadline\": \"2026-04-20T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks"]
+            },
+            "description": "✅ Resultado esperado: Status 201, tarefa CRITICAL criada\n\n💾 SALVAR ID: {{critical_task_id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "3.3 - Tentar criar tarefa para usuário não membro",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"projectId\": \"{{project_alpha_id}}\",\n  \"title\": \"Tarefa para não-membro\",\n  \"description\": \"Isto deve falhar\",\n  \"priority\": \"LOW\",\n  \"assigneeId\": \"REPLACE_WITH_NONMEMBER_ID\",\n  \"deadline\": \"2026-05-31T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks"]
+            },
+            "description": "❌ Resultado esperado: Status 400 - Assignee is not a member of the project"
+          },
+          "response": []
+        },
+        {
+          "name": "3.4 - Obter tarefa por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/{{task1_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "{{task1_id}}"]
+            },
+            "description": "✅ Resultado esperado: Status 200, retorna dados da tarefa"
+          },
+          "response": []
+        },
+        {
+          "name": "3.5 - Listar tarefas do projeto",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, lista paginada de tarefas"
+          },
+          "response": []
+        },
+        {
+          "name": "3.6 - Filtrar tarefas por status=TODO",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?status=TODO&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "TODO"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, retorna apenas tarefas com status=TODO"
+          },
+          "response": []
+        },
+        {
+          "name": "3.7 - Filtrar tarefas por prioridade=HIGH",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?priority=HIGH&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "priority",
+                  "value": "HIGH"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, retorna apenas tarefas com prioridade HIGH"
+          },
+          "response": []
+        },
+        {
+          "name": "3.8 - Filtrar tarefas por assignee",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?assigneeId=REPLACE_WITH_MEMBER1_ID&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "assigneeId",
+                  "value": "REPLACE_WITH_MEMBER1_ID"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, retorna tarefas do assignee específico"
+          },
+          "response": []
+        },
+        {
+          "name": "3.9 - Busca textual por título",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?search=Desenvolvimento&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Desenvolvimento"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, retorna tarefas com 'Desenvolvimento' no título ou descrição"
+          },
+          "response": []
+        },
+        {
+          "name": "3.10 - Atualizar tarefa: TODO → IN_PROGRESS",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Tarefa 1 - Desenvolvimento\",\n  \"description\": \"Implementar feature de autenticação\",\n  \"priority\": \"HIGH\",\n  \"status\": \"IN_PROGRESS\",\n  \"deadline\": \"2026-05-31T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/{{task1_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "{{task1_id}}"]
+            },
+            "description": "✅ Resultado esperado: Status 200, status atualizado para IN_PROGRESS"
+          },
+          "response": []
+        },
+        {
+          "name": "3.11 - REGRA: IN_PROGRESS → DONE (permitido)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Tarefa 1 - Desenvolvimento\",\n  \"description\": \"Implementar feature de autenticação\",\n  \"priority\": \"HIGH\",\n  \"status\": \"DONE\",\n  \"deadline\": \"2026-05-31T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/{{task1_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "{{task1_id}}"]
+            },
+            "description": "✅ Resultado esperado: Status 200, tarefa marcada como DONE\n\n🔍 REGRA: Uma tarefa pode ir de IN_PROGRESS → DONE"
+          },
+          "response": []
+        },
+        {
+          "name": "3.12 - REGRA: DONE → TODO (NÃO permitido)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Tarefa 1 - Desenvolvimento\",\n  \"description\": \"Implementar feature de autenticação\",\n  \"priority\": \"HIGH\",\n  \"status\": \"TODO\",\n  \"deadline\": \"2026-05-31T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/{{task1_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "{{task1_id}}"]
+            },
+            "description": "❌ Resultado esperado: Status 400 - A tarefa DONE não pode voltar para TODO\n\n🔍 REGRA: Uma tarefa DONE não pode voltar para TODO (apenas para IN_PROGRESS)"
+          },
+          "response": []
+        },
+        {
+          "name": "3.13 - REGRA: DONE → IN_PROGRESS (permitido - reabertura)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Tarefa 1 - Desenvolvimento\",\n  \"description\": \"Implementar feature de autenticação\",\n  \"priority\": \"HIGH\",\n  \"status\": \"IN_PROGRESS\",\n  \"deadline\": \"2026-05-31T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/{{task1_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "{{task1_id}}"]
+            },
+            "description": "✅ Resultado esperado: Status 200, tarefa reaberta para IN_PROGRESS\n\n🔍 REGRA: Uma tarefa DONE pode voltar para IN_PROGRESS"
+          },
+          "response": []
+        },
+        {
+          "name": "3.14 - REGRA: CRITICAL só pode ser DONE por ADMIN",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{member_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Bug crítico em produção\",\n  \"description\": \"Corrigir bug que impede login\",\n  \"priority\": \"CRITICAL\",\n  \"status\": \"DONE\",\n  \"deadline\": \"2026-04-20T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/{{critical_task_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "{{critical_task_id}}"]
+            },
+            "description": "❌ Resultado esperado: Status 403 - Apenas ADMIN pode fechar tarefas CRITICAL\n\n🔍 REGRA: Tarefas CRITICAL só podem ser fechadas (DONE) pelo ADMIN do projeto"
+          },
+          "response": []
+        },
+        {
+          "name": "3.15 - REGRA: CRITICAL pode ser DONE por ADMIN",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Bug crítico em produção\",\n  \"description\": \"Corrigir bug que impede login\",\n  \"priority\": \"CRITICAL\",\n  \"status\": \"DONE\",\n  \"deadline\": \"2026-04-20T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/{{critical_task_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "{{critical_task_id}}"]
+            },
+            "description": "✅ Resultado esperado: Status 200, tarefa CRITICAL marcada como DONE por ADMIN\n\n🔍 REGRA: ADMIN pode fechar tarefas CRITICAL"
+          },
+          "response": []
+        },
+        {
+          "name": "3.16 - Deletar tarefa",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/{{task1_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "{{task1_id}}"]
+            },
+            "description": "✅ Resultado esperado: Status 200, tarefa deletada (soft delete)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4️⃣ REGRA: WIP LIMIT (Máximo 5 IN_PROGRESS)",
+      "description": "Testa limite de 5 tarefas IN_PROGRESS por responsável",
+      "item": [
+        {
+          "name": "4.1 - Criar 5 tarefas IN_PROGRESS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"projectId\": \"{{project_alpha_id}}\",\n  \"title\": \"Tarefa WIP 1\",\n  \"description\": \"Tarefa para teste de WIP limit\",\n  \"priority\": \"LOW\",\n  \"assigneeId\": \"REPLACE_WITH_MEMBER2_ID\",\n  \"deadline\": \"2026-05-31T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks"]
+            },
+            "description": "✅ Criar primeira tarefa (1/5 IN_PROGRESS)"
+          },
+          "response": []
+        },
+        {
+          "name": "4.2 - Atualizar tarefa WIP 1 para IN_PROGRESS",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Tarefa WIP 1\",\n  \"description\": \"Tarefa para teste de WIP limit\",\n  \"priority\": \"LOW\",\n  \"status\": \"IN_PROGRESS\",\n  \"deadline\": \"2026-05-31T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/{{wip_task1_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "{{wip_task1_id}}"]
+            },
+            "description": "✅ Atualizar para IN_PROGRESS"
+          },
+          "response": []
+        },
+        {
+          "name": "4.3 - Criar 4 tarefas adicionais e mover para IN_PROGRESS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"projectId\": \"{{project_alpha_id}}\",\n    \"title\": \"Tarefa WIP 2\",\n    \"description\": \"Segunda tarefa para WIP\",\n    \"priority\": \"LOW\",\n    \"assigneeId\": \"REPLACE_WITH_MEMBER2_ID\",\n    \"deadline\": \"2026-05-31T23:59:59Z\"\n  },\n  {\n    \"projectId\": \"{{project_alpha_id}}\",\n    \"title\": \"Tarefa WIP 3\",\n    \"description\": \"Terceira tarefa para WIP\",\n    \"priority\": \"LOW\",\n    \"assigneeId\": \"REPLACE_WITH_MEMBER2_ID\",\n    \"deadline\": \"2026-05-31T23:59:59Z\"\n  },\n  {\n    \"projectId\": \"{{project_alpha_id}}\",\n    \"title\": \"Tarefa WIP 4\",\n    \"description\": \"Quarta tarefa para WIP\",\n    \"priority\": \"LOW\",\n    \"assigneeId\": \"REPLACE_WITH_MEMBER2_ID\",\n    \"deadline\": \"2026-05-31T23:59:59Z\"\n  },\n  {\n    \"projectId\": \"{{project_alpha_id}}\",\n    \"title\": \"Tarefa WIP 5\",\n    \"description\": \"Quinta tarefa para WIP\",\n    \"priority\": \"LOW\",\n    \"assigneeId\": \"REPLACE_WITH_MEMBER2_ID\",\n    \"deadline\": \"2026-05-31T23:59:59Z\"\n  }\n]"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks"]
+            },
+            "description": "ℹ️ Executar este request 4 vezes para criar as 4 tarefas restantes"
+          },
+          "response": []
+        },
+        {
+          "name": "4.4 - REGRA: 6ª tarefa IN_PROGRESS deve falhar (WIP limit)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"projectId\": \"{{project_alpha_id}}\",\n  \"title\": \"Tarefa WIP 6 - Deve Falhar\",\n  \"description\": \"Esta tarefa não deve ser criada porque estamos no limite de WIP\",\n  \"priority\": \"LOW\",\n  \"assigneeId\": \"REPLACE_WITH_MEMBER2_ID\",\n  \"deadline\": \"2026-05-31T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks"]
+            },
+            "description": "❌ Resultado esperado: Status 400 - Assignee has reached the maximum limit of 5 in-progress tasks (WIP limit exceeded)\n\n🔍 REGRA: WIP Limit - Máximo 5 tarefas IN_PROGRESS por responsável"
+          },
+          "response": []
+        },
+        {
+          "name": "4.5 - Mover uma tarefa para DONE para liberar WIP",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Tarefa WIP 1\",\n  \"description\": \"Tarefa para teste de WIP limit\",\n  \"priority\": \"LOW\",\n  \"status\": \"DONE\",\n  \"deadline\": \"2026-05-31T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/{{wip_task1_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "{{wip_task1_id}}"]
+            },
+            "description": "✅ Agora tem espaço para uma nova tarefa IN_PROGRESS"
+          },
+          "response": []
+        },
+        {
+          "name": "4.6 - Criar nova tarefa após liberar WIP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"projectId\": \"{{project_alpha_id}}\",\n  \"title\": \"Tarefa WIP 6 - Agora OK\",\n  \"description\": \"Agora é possível criar porque liberamos uma vaga\",\n  \"priority\": \"LOW\",\n  \"assigneeId\": \"REPLACE_WITH_MEMBER2_ID\",\n  \"deadline\": \"2026-05-31T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tasks",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks"]
+            },
+            "description": "✅ Resultado esperado: Status 201, tarefa criada com sucesso"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "5️⃣ FILTROS E ORDENAÇÃO AVANÇADOS",
+      "description": "Testa todos os filtros e ordenação de tarefas",
+      "item": [
+        {
+          "name": "5.1 - Filtro: Múltiplos filtros (status + priority)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?status=IN_PROGRESS&priority=HIGH&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "IN_PROGRESS"
+                },
+                {
+                  "key": "priority",
+                  "value": "HIGH"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, tarefas com status=IN_PROGRESS E priority=HIGH"
+          },
+          "response": []
+        },
+        {
+          "name": "5.2 - Ordenação por prioridade (DESC)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?sort=priority,desc&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "priority,desc"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, ordenadas por prioridade (CRITICAL, HIGH, MEDIUM, LOW)"
+          },
+          "response": []
+        },
+        {
+          "name": "5.3 - Ordenação por data de criação (DESC)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?sort=createdAt,desc&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "createdAt,desc"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, ordenadas por data de criação (mais recentes primeiro)"
+          },
+          "response": []
+        },
+        {
+          "name": "5.4 - Ordenação por deadline (ASC)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?sort=deadline,asc&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "deadline,asc"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, ordenadas por deadline (próximas primeiro)"
+          },
+          "response": []
+        },
+        {
+          "name": "5.5 - Filtro: Range de datas (startDate e endDate)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?startDate=2026-04-01&endDate=2026-05-31&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2026-04-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2026-05-31"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, tarefas dentro do range de datas"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "6️⃣ BUSCA TEXTUAL (SEARCH)",
+      "description": "Testa busca por texto no título e descrição",
+      "item": [
+        {
+          "name": "6.1 - Busca por palavra-chave no título",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?search=Bug&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Bug"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, tarefas contendo 'Bug' no título"
+          },
+          "response": []
+        },
+        {
+          "name": "6.2 - Busca por palavra-chave na descrição",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?search=autenticação&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "autenticação"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, tarefas contendo 'autenticação' no título ou descrição"
+          },
+          "response": []
+        },
+        {
+          "name": "6.3 - Busca case-insensitive",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?search=DESENVOLVIMENTO&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "DESENVOLVIMENTO"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, busca insensível a maiúsculas/minúsculas"
+          },
+          "response": []
+        },
+        {
+          "name": "6.4 - Busca com busca vazia",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?search=&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, retorna todas as tarefas"
+          },
+          "response": []
+        },
+        {
+          "name": "6.5 - Busca que não encontra resultados",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/tasks/project/{{project_alpha_id}}?search=TEXTO_QUE_NAO_EXISTE&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "tasks", "project", "{{project_alpha_id}}"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "TEXTO_QUE_NAO_EXISTE"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "✅ Resultado esperado: Status 200, retorna lista vazia"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "7️⃣ RELATÓRIO RESUMIDO",
+      "description": "Testa endpoint de relatório com contadores por status e prioridade",
+      "item": [
+        {
+          "name": "7.1 - Gerar relatório do projeto",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/reports/projects/{{project_alpha_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "reports", "projects", "{{project_alpha_id}}"]
+            },
+            "description": "✅ Resultado esperado: Status 200\n\nEstrutura esperada:\n```json\n{\n  \"success\": true,\n  \"message\": \"Report generated successfully\",\n  \"data\": {\n    \"projectId\": \"...\",\n    \"byStatus\": {\n      \"TODO\": 5,\n      \"IN_PROGRESS\": 3,\n      \"DONE\": 8\n    },\n    \"byPriority\": {\n      \"LOW\": 4,\n      \"MEDIUM\": 6,\n      \"HIGH\": 4,\n      \"CRITICAL\": 2\n    }\n  }\n}\n```"
+          },
+          "response": []
+        },
+        {
+          "name": "7.2 - Validar contadores após criar mais tarefas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/reports/projects/{{project_alpha_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "reports", "projects", "{{project_alpha_id}}"]
+            },
+            "description": "✅ Resultado esperado: Status 200, contadores atualizados"
+          },
+          "response": []
+        },
+        {
+          "name": "7.3 - Validar relatório reflete exclusões (soft delete)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/reports/projects/{{project_alpha_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "reports", "projects", "{{project_alpha_id}}"]
+            },
+            "description": "✅ Resultado esperado: Status 200, tarefas deletadas não são contadas"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "8️⃣ AUTORIZAÇÃO E CONTROLE DE ACESSO",
+      "description": "Testa autorização: usuários só podem acessar projetos e tarefas que pertencem",
+      "item": [
+        {
+          "name": "8.1 - MEMBER tenta acessar projeto em que não é membro",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{member_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/projects/{{project_alpha_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects", "{{project_alpha_id}}"]
+            },
+            "description": "⚠️ Nota: Comportamento depende da implementação de segurança\n\nResultado esperado: Status 403 ou acesso permitido (conforme política definida)"
+          },
+          "response": []
+        },
+        {
+          "name": "8.2 - MEMBER acessa projeto em que é membro",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{member_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/projects/{{project_alpha_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects", "{{project_alpha_id}}"]
+            },
+            "description": "✅ Resultado esperado: Status 200, MEMBER pode acessar"
+          },
+          "response": []
+        },
+        {
+          "name": "8.3 - MEMBER tenta deletar projeto",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{member_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/projects/{{project_alpha_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects", "{{project_alpha_id}}"]
+            },
+            "description": "❌ Resultado esperado: Status 403 - MEMBER não pode deletar projetos"
+          },
+          "response": []
+        },
+        {
+          "name": "8.4 - ADMIN pode deletar projeto",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/projects/{{project_alpha_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects", "{{project_alpha_id}}"]
+            },
+            "description": "✅ Resultado esperado: Status 200 - ADMIN pode deletar"
+          },
+          "response": []
+        },
+        {
+          "name": "8.5 - Request sem token (não autenticado)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/projects",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects"]
+            },
+            "description": "❌ Resultado esperado: Status 401 - Unauthorized"
+          },
+          "response": []
+        },
+        {
+          "name": "8.6 - Request com token inválido",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer INVALID_TOKEN_12345"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/projects",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "projects"]
+            },
+            "description": "❌ Resultado esperado: Status 401 - Invalid token"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
+

@@ -1,6 +1,9 @@
 package com.example.task_manager_backend.features.projects.services;
 
-import com.example.task_manager_backend.features.projects.core.*;
+import com.example.task_manager_backend.features.projects.core.dto.AddProjectMemberRequest;
+import com.example.task_manager_backend.features.projects.core.dto.CreateProjectRequest;
+import com.example.task_manager_backend.features.projects.core.dto.ProjectDto;
+import com.example.task_manager_backend.features.projects.core.dto.UpdateProjectRequest;
 import com.example.task_manager_backend.features.projects.domain.Project;
 import com.example.task_manager_backend.features.projects.domain.ProjectMember;
 import com.example.task_manager_backend.features.projects.usecases.*;
@@ -9,10 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
+
     private final CreateProjectHandler createProjectHandler;
     private final GetProjectByIdHandler getProjectByIdHandler;
     private final ListProjectsHandler listProjectsHandler;
@@ -38,12 +43,12 @@ public class ProjectService {
         this.getProjectMembersHandler = getProjectMembersHandler;
     }
 
-    public ProjectDto createProject(CreateProjectRequest request, Long ownerId) {
+    public ProjectDto createProject(CreateProjectRequest request, UUID ownerId) {
         Project project = createProjectHandler.execute(request, ownerId);
         return mapToDto(project);
     }
 
-    public ProjectDto getProjectById(Long projectId) {
+    public ProjectDto getProjectById(UUID projectId) {
         Project project = getProjectByIdHandler.execute(projectId);
         return mapToDto(project);
     }
@@ -53,26 +58,26 @@ public class ProjectService {
         return projects.map(this::mapToDto);
     }
     
-    public Page<ProjectDto> listProjects(String search, Long ownerId, Pageable pageable) {
+    public Page<ProjectDto> listProjects(String search, UUID ownerId, Pageable pageable) {
         Page<Project> projects = listProjectsHandler.execute(search, ownerId, pageable);
         return projects.map(this::mapToDto);
     }
 
-    public ProjectDto updateProject(Long projectId, UpdateProjectRequest request) {
+    public ProjectDto updateProject(UUID projectId, UpdateProjectRequest request) {
         Project project = updateProjectHandler.execute(projectId, request);
         return mapToDto(project);
     }
 
-    public void deleteProject(Long projectId) {
+    public void deleteProject(UUID projectId) {
         deleteProjectHandler.execute(projectId);
     }
 
-    public ProjectDto.ProjectMemberDto addMember(Long projectId, AddProjectMemberRequest request) {
+    public ProjectDto.ProjectMemberDto addMember(UUID projectId, AddProjectMemberRequest request) {
         ProjectMember member = addProjectMemberHandler.execute(projectId, request);
         return mapMemberToDto(member);
     }
 
-    public List<ProjectDto.ProjectMemberDto> getMembers(Long projectId) {
+    public List<ProjectDto.ProjectMemberDto> getMembers(UUID projectId) {
         List<ProjectMember> members = getProjectMembersHandler.execute(projectId);
         return members.stream()
                 .map(this::mapMemberToDto)
