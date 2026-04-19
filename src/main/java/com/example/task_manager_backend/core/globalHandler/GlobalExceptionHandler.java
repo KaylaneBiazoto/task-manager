@@ -1,4 +1,4 @@
-package com.example.task_manager_backend.core.advice;
+package com.example.task_manager_backend.core.globalHandler;
 
 import com.example.task_manager_backend.core.dto.ApiResponse;
 import com.example.task_manager_backend.features.auth.core.exception.UserBusinessException;

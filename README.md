@@ -164,4 +164,63 @@ docker run -p 8080:8080 \
 - Token secreto pode ser configurado em `api.security.token.secret` no `application.properties`
 - Para produção, altere a chave secreta!
 
+## Decisões Técnicas e Tradeoffs
+
+### 1. Banco de Dados H2 em Desenvolvimento
+**Decisão**: Usar H2 em memória como padrão de desenvolvimento
+- ✅ **Vantagens**: Rápido setup, sem dependências externas, ideal para testes
+- ❌ **Tradeoffs**: Dados não persistem entre reinicializações, não representa ambiente de produção
+
+### 2. Spring Boot + Spring Data JPA
+**Decisão**: Framework consolidado para desenvolvimento ágil
+- ✅ **Vantagens**: Comunidade grande, documentação extensa, produtividade alta
+- ❌ **Tradeoffs**: Menos controle fino sobre queries, overhead em aplicações muito simples
+
+### 3. JWT para Autenticação
+**Decisão**: Tokens stateless com JWT
+- ✅ **Vantagens**: Escalável, sem estado no servidor, suporta múltiplos servidores
+- ❌ **Tradeoffs**: Token não pode ser revogado imediatamente, requer HTTPS em produção
+
+### 4. Arquitetura em Camadas com Use Cases
+**Decisão**: Separação clara de responsabilidades com handlers
+- ✅ **Vantagens**: Código testável, manutenível, fácil de evoluir
+- ❌ **Tradeoffs**: Mais boilerplate inicial, mais classes para simples operações CRUD
+
+### 5. H2 Database Console Habilitado
+**Decisão**: Permitir acesso ao console H2 em desenvolvimento
+- ✅ **Vantagens**: Facilita debug, visualização de dados em tempo real
+- ❌ **Tradeoffs**: Segurança (desabilitar em produção), não disponível com PostgreSQL
+
+## O Que Faria Diferente com Mais Tempo
+
+### 1. **PostgreSQL** 
+- Substituir H2 por PostgreSQL como banco padrão
+- Implementar migrations com Flyway
+- Benefício: Dados persistentes, suporte a múltiplas conexões, melhor performance
+
+### 2. **Exclusão em Cascata**
+- Implementar delete cascade nas relações (Projeto → Tarefas, etc)
+- Atualmente, existe uma exclusão manual de tarefas antes de deletar projeto
+- Benefício: Integridade referencial automática, operações mais seguras
+
+### 3. **Cacheamento com Redis**
+- Cache em memória para queries frequentes (projetos, tarefas, relatórios)
+- Implementar invalidação de cache inteligente
+- Benefício: Redução de queries ao banco, melhor performance
+
+### 4. **Sistema de Auditoria**
+- Rastrear todas as mudanças (create, update, delete) com user e timestamp
+- Histórico completo de quem fez o quê e quando
+- Benefício: Compliance, rastreabilidade, segurança
+
+### 5. **Cobertura de Testes Expandida**
+- Aumentar cobertura de testes unitários para >80%
+- Implementar testes de integração e E2E
+- Adicionar testes de performance
+- Benefício: Maior confiabilidade, detecção precoce de bugs
+
+### 6. **Frontend com Angular**
+- Desenvolver interface web completa com Angular
+- Benefício: Experiência do usuário, interface intuitiva
+
 
