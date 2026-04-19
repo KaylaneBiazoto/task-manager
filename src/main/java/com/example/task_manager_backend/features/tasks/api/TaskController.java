@@ -5,6 +5,7 @@ import com.example.task_manager_backend.features.tasks.core.dto.CreateTaskReques
 import com.example.task_manager_backend.features.tasks.core.dto.TaskDto;
 import com.example.task_manager_backend.features.tasks.core.dto.UpdateTaskRequest;
 import com.example.task_manager_backend.features.tasks.services.TaskFacade;
+import com.example.task_manager_backend.infrastructure.security.SecurityContextService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -21,9 +22,11 @@ import java.util.UUID;
 @Tag(name = "Tasks", description = "API for managing tasks")
 public class TaskController {
     private final TaskFacade taskFacade;
+    private final SecurityContextService securityContextService;
 
-    public TaskController(TaskFacade taskFacade) {
+    public TaskController(TaskFacade taskFacade, SecurityContextService securityContextService) {
         this.taskFacade = taskFacade;
+        this.securityContextService = securityContextService;
     }
 
     @PostMapping
@@ -62,9 +65,8 @@ public class TaskController {
     public ResponseEntity<ApiResponse<TaskDto>> updateTask(
             @PathVariable UUID taskId,
             @Valid @RequestBody UpdateTaskRequest request) {
-        // TODO: Extract current user ID and role from security context
-        UUID currentUserId = UUID.fromString("00000000-0000-0000-0000-000000000000");
-        String currentUserRole = "ADMIN";
+        UUID currentUserId = securityContextService.getCurrentUserId();
+        String currentUserRole = securityContextService.getCurrentUserRole();
 
         TaskDto taskDto = taskFacade.updateTask(taskId, request, currentUserId, currentUserRole);
         ApiResponse<TaskDto> response = new ApiResponse<>(true, "Task updated successfully", taskDto);

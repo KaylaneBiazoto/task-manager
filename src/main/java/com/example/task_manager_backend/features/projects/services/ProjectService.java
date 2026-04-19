@@ -68,8 +68,8 @@ public class ProjectService {
         return mapToDto(project);
     }
 
-    public void deleteProject(UUID projectId) {
-        deleteProjectHandler.execute(projectId);
+    public void deleteProject(UUID projectId, UUID currentUserId) {
+        deleteProjectHandler.execute(projectId, currentUserId);
     }
 
     public ProjectDto.ProjectMemberDto addMember(UUID projectId, AddProjectMemberRequest request) {
