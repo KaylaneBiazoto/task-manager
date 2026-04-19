@@ -75,21 +75,26 @@ public class TaskFacade {
     }
 
     private TaskDto mapToDto(Task task) {
-        TaskDto dto = new TaskDto();
-        dto.setId(task.getId());
-        dto.setTitle(task.getTitle());
-        dto.setDescription(task.getDescription());
-        dto.setStatus(task.getStatus());
-        dto.setPriority(task.getPriority());
-        dto.setDeadline(task.getDeadline());
-        dto.setProjectId(task.getProject().getId());
+        Long assigneeId = null;
+        String assigneeName = null;
         if (task.getAssignee() != null) {
-            dto.setAssigneeId(task.getAssignee().getId());
-            dto.setAssigneeName(task.getAssignee().getUsername());
+            assigneeId = task.getAssignee().getId();
+            assigneeName = task.getAssignee().getUsername();
         }
-        dto.setCreatedAt(task.getCreatedAt());
-        dto.setUpdatedAt(task.getUpdatedAt());
-        return dto;
+        
+        return new TaskDto(
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getStatus(),
+                task.getPriority(),
+                task.getDeadline(),
+                task.getProject().getId(),
+                assigneeId,
+                assigneeName,
+                task.getCreatedAt(),
+                task.getUpdatedAt()
+        );
     }
 }
 

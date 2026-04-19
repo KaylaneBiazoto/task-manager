@@ -2,26 +2,21 @@ package com.example.task_manager_backend.features.tasks.core;
 
 import com.example.task_manager_backend.features.tasks.domain.TaskPriority;
 import com.example.task_manager_backend.features.tasks.domain.TaskStatus;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class UpdateTaskRequest {
-    private String title;
+public record UpdateTaskRequest(
+    String title,
 
-    private String description;
+    String description,
 
-    private TaskStatus status;
+    TaskStatus status,
 
-    private TaskPriority priority;
+    TaskPriority priority,
 
-    private LocalDate deadline;
+    LocalDate deadline,
 
-    private Long assigneeId;
+    Long assigneeId
+) {
 }
 

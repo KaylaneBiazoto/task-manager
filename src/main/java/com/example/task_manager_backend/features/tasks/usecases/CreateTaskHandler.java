@@ -25,11 +25,11 @@ public class CreateTaskHandler {
 
     public Task execute(CreateTaskRequest request) {
         // Validar projeto existe (apenas ativos)
-        Project project = projectRepository.findByIdAndActiveTrue(request.getProjectId())
+        Project project = projectRepository.findByIdAndActiveTrue(request.projectId())
                 .orElseThrow(() -> new TaskBusinessException("Project not found"));
 
         // Validar assignee existe (apenas ativos)
-        User assignee = userRepository.findByIdAndActiveTrue(request.getAssigneeId())
+        User assignee = userRepository.findByIdAndActiveTrue(request.assigneeId())
                 .orElseThrow(() -> new TaskBusinessException("Assignee user not found"));
 
         // Validar se assignee é membro do projeto
@@ -43,11 +43,11 @@ public class CreateTaskHandler {
 
         // Criar tarefa
         Task task = new Task();
-        task.setTitle(request.getTitle());
-        task.setDescription(request.getDescription());
+        task.setTitle(request.title());
+        task.setDescription(request.description());
         task.setStatus(TaskStatus.TODO);
-        task.setPriority(request.getPriority());
-        task.setDeadline(request.getDeadline());
+        task.setPriority(request.priority());
+        task.setDeadline(request.deadline());
         task.setProject(project);
         task.setAssignee(assignee);
         task.setActive(true);

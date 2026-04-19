@@ -51,10 +51,7 @@ class CreateProjectHandlerTest {
         owner.setUsername("admin");
         owner.setActive(true);
 
-        CreateProjectRequest request = new CreateProjectRequest();
-        request.setName(projectName);
-        request.setDescription(projectDescription);
-        request.setOwnerId(ownerId);
+        CreateProjectRequest request = new CreateProjectRequest(projectName, projectDescription, ownerId);
 
         Project savedProject = new Project();
         savedProject.setId(1L);
@@ -86,9 +83,7 @@ class CreateProjectHandlerTest {
     void testExecute_WithInvalidOwner_ShouldThrowProjectBusinessException() {
         // Arrange
         Long invalidOwnerId = 999L;
-        CreateProjectRequest request = new CreateProjectRequest();
-        request.setName("Test Project");
-        request.setOwnerId(invalidOwnerId);
+        CreateProjectRequest request = new CreateProjectRequest("Test Project", null, invalidOwnerId);
 
         when(userRepository.findByIdAndActiveTrue(invalidOwnerId)).thenReturn(Optional.empty());
 
@@ -110,9 +105,7 @@ class CreateProjectHandlerTest {
         inactiveOwner.setId(ownerId);
         inactiveOwner.setActive(false);
 
-        CreateProjectRequest request = new CreateProjectRequest();
-        request.setName("Test Project");
-        request.setOwnerId(ownerId);
+        CreateProjectRequest request = new CreateProjectRequest("Test Project", null, ownerId);
 
         when(userRepository.findByIdAndActiveTrue(ownerId)).thenReturn(Optional.empty());
 
@@ -133,9 +126,7 @@ class CreateProjectHandlerTest {
         owner.setUsername("admin");
         owner.setActive(true);
 
-        CreateProjectRequest request = new CreateProjectRequest();
-        request.setName("Test Project");
-        request.setOwnerId(ownerId);
+        CreateProjectRequest request = new CreateProjectRequest("Test Project", null, ownerId);
 
         Project savedProject = new Project();
         savedProject.setId(1L);

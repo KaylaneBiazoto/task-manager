@@ -68,8 +68,7 @@ class UpdateTaskHandlerTest {
         task.setProject(project);
         task.setActive(true);
 
-        UpdateTaskRequest request = new UpdateTaskRequest();
-        request.setStatus(TaskStatus.IN_PROGRESS);
+        UpdateTaskRequest request = new UpdateTaskRequest(null, null, TaskStatus.IN_PROGRESS, null, null, null);
 
         Task updatedTask = new Task();
         updatedTask.setId(taskId);
@@ -91,7 +90,7 @@ class UpdateTaskHandlerTest {
     void testExecute_WithTaskNotFound_ShouldThrowTaskNotFoundException() {
         // Arrange
         Long invalidTaskId = 999L;
-        UpdateTaskRequest request = new UpdateTaskRequest();
+        UpdateTaskRequest request = new UpdateTaskRequest(null, null, null, null, null, null);
 
         when(taskRepository.findByIdAndActiveTrue(invalidTaskId)).thenReturn(Optional.empty());
 
@@ -121,8 +120,7 @@ class UpdateTaskHandlerTest {
         task.setProject(project);
         task.setActive(true);
 
-        UpdateTaskRequest request = new UpdateTaskRequest();
-        request.setStatus(TaskStatus.TODO);
+        UpdateTaskRequest request = new UpdateTaskRequest(null, null, TaskStatus.TODO, null, null, null);
 
         when(taskRepository.findByIdAndActiveTrue(taskId)).thenReturn(Optional.of(task));
 
@@ -152,8 +150,7 @@ class UpdateTaskHandlerTest {
         task.setProject(project);
         task.setActive(true);
 
-        UpdateTaskRequest request = new UpdateTaskRequest();
-        request.setStatus(TaskStatus.IN_PROGRESS);
+        UpdateTaskRequest request = new UpdateTaskRequest(null, null, TaskStatus.IN_PROGRESS, null, null, null);
 
         Task updatedTask = new Task();
         updatedTask.setStatus(TaskStatus.IN_PROGRESS);
@@ -187,8 +184,7 @@ class UpdateTaskHandlerTest {
         task.setProject(project);
         task.setActive(true);
 
-        UpdateTaskRequest request = new UpdateTaskRequest();
-        request.setStatus(TaskStatus.DONE);
+        UpdateTaskRequest request = new UpdateTaskRequest(null, null, TaskStatus.DONE, null, null, null);
 
         Task updatedTask = new Task();
         updatedTask.setStatus(TaskStatus.DONE);
@@ -222,8 +218,7 @@ class UpdateTaskHandlerTest {
         task.setProject(project);
         task.setActive(true);
 
-        UpdateTaskRequest request = new UpdateTaskRequest();
-        request.setStatus(TaskStatus.DONE);
+        UpdateTaskRequest request = new UpdateTaskRequest(null, null, TaskStatus.DONE, null, null, null);
 
         when(taskRepository.findByIdAndActiveTrue(taskId)).thenReturn(Optional.of(task));
 
@@ -266,8 +261,7 @@ class UpdateTaskHandlerTest {
         task.setProject(project);
         task.setActive(true);
 
-        UpdateTaskRequest request = new UpdateTaskRequest();
-        request.setAssigneeId(newAssigneeId);
+        UpdateTaskRequest request = new UpdateTaskRequest(null, null, null, null, null, newAssigneeId);
 
         Task updatedTask = new Task();
         updatedTask.setAssignee(newAssignee);
@@ -310,8 +304,7 @@ class UpdateTaskHandlerTest {
         task.setProject(project);
         task.setActive(true);
 
-        UpdateTaskRequest request = new UpdateTaskRequest();
-        request.setAssigneeId(newAssigneeId);
+        UpdateTaskRequest request = new UpdateTaskRequest(null, null, null, null, null, newAssigneeId);
 
         when(taskRepository.findByIdAndActiveTrue(taskId)).thenReturn(Optional.of(task));
         when(userRepository.findByIdAndActiveTrue(newAssigneeId)).thenReturn(Optional.of(newAssignee));
@@ -348,10 +341,7 @@ class UpdateTaskHandlerTest {
         task.setProject(project);
         task.setActive(true);
 
-        UpdateTaskRequest request = new UpdateTaskRequest();
-        request.setTitle(newTitle);
-        request.setPriority(newPriority);
-        request.setDeadline(newDeadline);
+        UpdateTaskRequest request = new UpdateTaskRequest(newTitle, null, null, newPriority, newDeadline, null);
 
         Task updatedTask = new Task();
         updatedTask.setTitle(newTitle);

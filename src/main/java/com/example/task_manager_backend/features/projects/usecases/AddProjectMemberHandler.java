@@ -32,7 +32,7 @@ public class AddProjectMemberHandler {
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
 
         // Validar usuário (apenas ativos)
-        User user = userRepository.findByIdAndActiveTrue(request.getUserId())
+        User user = userRepository.findByIdAndActiveTrue(request.userId())
                 .orElseThrow(() -> new ProjectBusinessException("User not found"));
 
         // Verificar se já é membro
@@ -47,7 +47,7 @@ public class AddProjectMemberHandler {
         ProjectMember member = new ProjectMember();
         member.setProject(project);
         member.setUser(user);
-        member.setProjectRole(request.getProjectRole());
+        member.setProjectRole(request.projectRole());
         member.setActive(true);
 
         return projectMemberRepository.save(member);

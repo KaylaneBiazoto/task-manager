@@ -80,14 +80,8 @@ public class ProjectService {
     }
 
     private ProjectDto mapToDto(Project project) {
-        ProjectDto dto = new ProjectDto();
-        dto.setId(project.getId());
-        dto.setName(project.getName());
-        dto.setDescription(project.getDescription());
-        dto.setOwnerId(project.getOwnerId());
-        dto.setActive(project.getActive());
-        dto.setCreatedAt(project.getCreatedAt());
-        dto.setUpdatedAt(project.getUpdatedAt());
+        List<ProjectDto.ProjectMemberDto> members = null;
+        String ownerName = project.getOwnerId() != null ? "" : null;
 
         if (project.getMembers() != null && !project.getMembers().isEmpty()) {
             // Encontrar o owner (ADMIN)
@@ -97,18 +91,27 @@ public class ProjectService {
                     .orElse(null);
 
             if (ownerMember != null) {
-                dto.setOwnerId(ownerMember.getUser().getId());
-                dto.setOwnerName(ownerMember.getUser().getUsername());
+                ownerName = ownerMember.getUser().getUsername();
             }
 
             // Mapear todos os membros
-            dto.setMembers(project.getMembers().stream()
+            members = project.getMembers().stream()
                     .filter(ProjectMember::getActive)
                     .map(this::mapMemberToDto)
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toList());
         }
 
-        return dto;
+        return new ProjectDto(
+                project.getId(),
+                project.getName(),
+                project.getDescription(),
+                project.getOwnerId(),
+                ownerName,
+                members,
+                project.getActive(),
+                project.getCreatedAt(),
+                project.getUpdatedAt()
+        );
     }
 
     private ProjectDto.ProjectMemberDto mapMemberToDto(ProjectMember member) {

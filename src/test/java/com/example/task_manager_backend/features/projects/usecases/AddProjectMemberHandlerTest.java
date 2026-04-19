@@ -61,9 +61,7 @@ class AddProjectMemberHandlerTest {
         project.setActive(true);
         project.setMembers(new ArrayList<>()); // No members yet
 
-        AddProjectMemberRequest request = new AddProjectMemberRequest();
-        request.setUserId(userId);
-        request.setProjectRole(memberRole);
+        AddProjectMemberRequest request = new AddProjectMemberRequest(userId, memberRole);
 
         ProjectMember savedMember = new ProjectMember();
         savedMember.setId(1L);
@@ -95,8 +93,7 @@ class AddProjectMemberHandlerTest {
     void testExecute_WithInvalidProject_ShouldThrowProjectNotFoundException() {
         // Arrange
         Long invalidProjectId = 999L;
-        AddProjectMemberRequest request = new AddProjectMemberRequest();
-        request.setUserId(2L);
+        AddProjectMemberRequest request = new AddProjectMemberRequest(2L, null);
 
         when(projectRepository.findByIdAndActiveTrue(invalidProjectId)).thenReturn(Optional.empty());
 
@@ -119,8 +116,7 @@ class AddProjectMemberHandlerTest {
         project.setId(projectId);
         project.setActive(true);
 
-        AddProjectMemberRequest request = new AddProjectMemberRequest();
-        request.setUserId(invalidUserId);
+        AddProjectMemberRequest request = new AddProjectMemberRequest(invalidUserId, null);
 
         when(projectRepository.findByIdAndActiveTrue(projectId)).thenReturn(Optional.of(project));
         when(userRepository.findByIdAndActiveTrue(invalidUserId)).thenReturn(Optional.empty());
@@ -152,9 +148,7 @@ class AddProjectMemberHandlerTest {
         project.setActive(true);
         project.setMembers(List.of(existingMember));
 
-        AddProjectMemberRequest request = new AddProjectMemberRequest();
-        request.setUserId(userId);
-        request.setProjectRole("MEMBER");
+        AddProjectMemberRequest request = new AddProjectMemberRequest(userId, "MEMBER");
 
         when(projectRepository.findByIdAndActiveTrue(projectId)).thenReturn(Optional.of(project));
         when(userRepository.findByIdAndActiveTrue(userId)).thenReturn(Optional.of(user));
@@ -182,9 +176,7 @@ class AddProjectMemberHandlerTest {
         project.setActive(true);
         project.setMembers(new ArrayList<>());
 
-        AddProjectMemberRequest request = new AddProjectMemberRequest();
-        request.setUserId(userId);
-        request.setProjectRole("ADMIN");
+        AddProjectMemberRequest request = new AddProjectMemberRequest(userId, "ADMIN");
 
         ProjectMember savedMember = new ProjectMember();
         savedMember.setId(1L);
@@ -217,8 +209,7 @@ class AddProjectMemberHandlerTest {
         inactiveUser.setId(inactiveUserId);
         inactiveUser.setActive(false);
 
-        AddProjectMemberRequest request = new AddProjectMemberRequest();
-        request.setUserId(inactiveUserId);
+        AddProjectMemberRequest request = new AddProjectMemberRequest(inactiveUserId, null);
 
         when(projectRepository.findByIdAndActiveTrue(projectId)).thenReturn(Optional.of(project));
         when(userRepository.findByIdAndActiveTrue(inactiveUserId)).thenReturn(Optional.empty());
@@ -250,9 +241,7 @@ class AddProjectMemberHandlerTest {
         project.setActive(true);
         project.setMembers(List.of(inactiveMember)); // User is inactive member
 
-        AddProjectMemberRequest request = new AddProjectMemberRequest();
-        request.setUserId(userId);
-        request.setProjectRole("MEMBER");
+        AddProjectMemberRequest request = new AddProjectMemberRequest(userId, "MEMBER");
 
         ProjectMember savedMember = new ProjectMember();
         savedMember.setId(2L);

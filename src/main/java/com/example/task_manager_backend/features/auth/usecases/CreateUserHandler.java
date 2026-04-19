@@ -16,22 +16,22 @@ public class CreateUserHandler {
 
     public User execute(CreateUserRequest request) {
         // Validar se email já existe (somente usuários ativos)
-        if (userRepository.findByEmailAndActiveTrue(request.getEmail()).isPresent()) {
+        if (userRepository.findByEmailAndActiveTrue(request.email()).isPresent()) {
             throw new UserBusinessException("Email already registered");
         }
 
         // Validar se username já existe (somente usuários ativos)
-        if (userRepository.findByUsernameAndActiveTrue(request.getUsername()).isPresent()) {
+        if (userRepository.findByUsernameAndActiveTrue(request.username()).isPresent()) {
             throw new UserBusinessException("Username already taken");
         }
 
         User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword()); // TODO: Implement password hashing with JWT implementation
+        user.setUsername(request.username());
+        user.setEmail(request.email());
+        user.setPassword(request.password()); // TODO: Implement password hashing with JWT implementation
         
         // Set role with default to MEMBER
-        String role = request.getRole();
+        String role = request.role();
         if (role == null || role.isBlank()) {
             role = "MEMBER";
         }
