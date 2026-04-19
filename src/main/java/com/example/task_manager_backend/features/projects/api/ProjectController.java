@@ -6,6 +6,7 @@ import com.example.task_manager_backend.features.projects.core.dto.CreateProject
 import com.example.task_manager_backend.features.projects.core.dto.ProjectDto;
 import com.example.task_manager_backend.features.projects.core.dto.UpdateProjectRequest;
 import com.example.task_manager_backend.features.projects.services.ProjectService;
+import com.example.task_manager_backend.infrastructure.security.SecurityContextService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +21,11 @@ import java.util.UUID;
 @RequestMapping("/api/projects")
 public class ProjectController {
     private final ProjectService projectService;
+    private final SecurityContextService securityContextService;
 
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(ProjectService projectService, SecurityContextService securityContextService) {
         this.projectService = projectService;
+        this.securityContextService = securityContextService;
     }
 
     @PostMapping
@@ -61,7 +64,8 @@ public class ProjectController {
 
     @DeleteMapping("/{projectId}")
     public ResponseEntity<ApiResponse<Void>> deleteProject(@PathVariable UUID projectId) {
-        projectService.deleteProject(projectId);
+        UUID currentUserId = securityContextService.getCurrentUserId();
+        projectService.deleteProject(projectId, currentUserId);
         ApiResponse<Void> response = new ApiResponse<>(true, "Project deleted successfully", null);
         return ResponseEntity.ok(response);
     }

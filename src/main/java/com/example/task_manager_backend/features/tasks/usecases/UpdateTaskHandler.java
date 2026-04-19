@@ -80,7 +80,7 @@ public class UpdateTaskHandler {
 
         // Regra 2: Tarefas com prioridade CRITICAL só podem ser fechadas (DONE) pelo ADMIN do projeto
         if (newStatus == TaskStatus.DONE && task.getPriority().name().equals("CRITICAL")) {
-            if (!"ADMIN".equals(currentUserRole)) {
+            if (!task.getPriority().name().equals("CRITICAL") || !"ADMIN".equals(currentUserRole)) {
                 throw new TaskBusinessException("Only project ADMIN can mark CRITICAL priority tasks as DONE");
             }
         }
