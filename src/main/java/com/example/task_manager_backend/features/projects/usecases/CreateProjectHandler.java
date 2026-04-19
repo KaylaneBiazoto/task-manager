@@ -1,9 +1,10 @@
 package com.example.task_manager_backend.features.projects.usecases;
+import java.util.UUID;
 
 import com.example.task_manager_backend.features.auth.domain.User;
 import com.example.task_manager_backend.features.auth.repositories.UserRepository;
-import com.example.task_manager_backend.features.projects.core.CreateProjectRequest;
-import com.example.task_manager_backend.features.projects.core.ProjectBusinessException;
+import com.example.task_manager_backend.features.projects.core.dto.CreateProjectRequest;
+import com.example.task_manager_backend.features.projects.core.exception.ProjectBusinessException;
 import com.example.task_manager_backend.features.projects.domain.Project;
 import com.example.task_manager_backend.features.projects.domain.ProjectMember;
 import com.example.task_manager_backend.features.projects.repositories.ProjectRepository;
@@ -25,7 +26,7 @@ public class CreateProjectHandler {
         this.userRepository = userRepository;
     }
 
-    public Project execute(CreateProjectRequest request, Long ownerId) {
+    public Project execute(CreateProjectRequest request, UUID ownerId) {
         // Validar que o owner existe (apenas ativos)
         User owner = userRepository.findByIdAndActiveTrue(ownerId)
                 .orElseThrow(() -> new ProjectBusinessException("Owner user not found"));

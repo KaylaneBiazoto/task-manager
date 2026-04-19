@@ -40,17 +40,17 @@ A entidade `Task` contém os seguintes campos:
 
 | Campo | Tipo | Descrição | Obrigatório |
 |-------|------|-----------|------------|
-| `id` | Long | Identificador único | Sim (auto-gerado) |
+| `id` | UUID | Identificador único | Sim (auto-gerado) |
 | `title` | String | Título da tarefa | Sim (máx 200 caracteres) |
 | `description` | String | Descrição detalhada | Não |
 | `status` | TaskStatus | TODO, IN_PROGRESS ou DONE | Sim (default: TODO) |
 | `priority` | TaskPriority | LOW, MEDIUM, HIGH ou CRITICAL | Sim |
 | `deadline` | LocalDate | Prazo da tarefa | Não |
 | `project` | Project | Projeto ao qual pertence | Sim |
-| `assignee` | User | Usuário responsável | Sim |
+| `assignee` | User | Usuário responsável | Não |
 | `active` | Boolean | Indicador de ativo/deletado | Sim (default: true) |
-| `createdAt` | ZonedDateTime | Data de criação | Sim (auto) |
-| `updatedAt` | ZonedDateTime | Data de última atualização | Sim (auto) |
+| `createdAt` | Instant | Data de criação | Sim (auto) |
+| `updatedAt` | Instant | Data de última atualização | Sim (auto) |
 
 ## Enums
 
@@ -352,7 +352,7 @@ O **GlobalExceptionHandler** captura exceções específicas:
 
 ## Migrations do Banco
 
-A tabela `tasks` já existe no schema inicial. Seus campos:
+A tabela `tasks` foi migrada para usar UUID. Seu schema atual:
 
 ```sql
 CREATE TABLE tasks (
@@ -371,6 +371,7 @@ CREATE TABLE tasks (
     CONSTRAINT fk_tasks_assignee FOREIGN KEY (assignee_id) REFERENCES users (id)
 );
 ```
+
 
 ## Exemplos de Uso
 

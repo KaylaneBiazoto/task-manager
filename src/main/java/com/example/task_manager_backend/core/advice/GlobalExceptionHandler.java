@@ -1,12 +1,12 @@
 package com.example.task_manager_backend.core.advice;
 
 import com.example.task_manager_backend.core.dto.ApiResponse;
-import com.example.task_manager_backend.features.auth.core.UserBusinessException;
-import com.example.task_manager_backend.features.auth.core.UserNotFoundException;
-import com.example.task_manager_backend.features.projects.core.ProjectBusinessException;
-import com.example.task_manager_backend.features.projects.core.ProjectNotFoundException;
-import com.example.task_manager_backend.features.tasks.core.TaskBusinessException;
-import com.example.task_manager_backend.features.tasks.core.TaskNotFoundException;
+import com.example.task_manager_backend.features.auth.core.exception.UserBusinessException;
+import com.example.task_manager_backend.features.auth.core.exception.UserNotFoundException;
+import com.example.task_manager_backend.features.projects.core.exception.ProjectBusinessException;
+import com.example.task_manager_backend.features.projects.core.exception.ProjectNotFoundException;
+import com.example.task_manager_backend.features.tasks.core.exception.TaskBusinessException;
+import com.example.task_manager_backend.features.tasks.core.exception.TaskNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

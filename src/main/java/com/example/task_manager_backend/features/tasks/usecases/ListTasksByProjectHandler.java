@@ -1,4 +1,5 @@
 package com.example.task_manager_backend.features.tasks.usecases;
+import java.util.UUID;
 
 import com.example.task_manager_backend.features.tasks.domain.Task;
 import com.example.task_manager_backend.features.tasks.repositories.TaskRepository;
@@ -14,7 +15,7 @@ public class ListTasksByProjectHandler {
         this.taskRepository = taskRepository;
     }
 
-    public List<Task> execute(Long projectId) {
+    public List<Task> execute(UUID projectId) {
         return taskRepository.findByProjectIdAndActiveTrue(projectId);
     }
 }

@@ -1,7 +1,10 @@
 package com.example.task_manager_backend.features.projects.api;
 
 import com.example.task_manager_backend.core.dto.ApiResponse;
-import com.example.task_manager_backend.features.projects.core.*;
+import com.example.task_manager_backend.features.projects.core.dto.AddProjectMemberRequest;
+import com.example.task_manager_backend.features.projects.core.dto.CreateProjectRequest;
+import com.example.task_manager_backend.features.projects.core.dto.ProjectDto;
+import com.example.task_manager_backend.features.projects.core.dto.UpdateProjectRequest;
 import com.example.task_manager_backend.features.projects.services.ProjectService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -11,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/projects")
@@ -30,7 +34,7 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectId}")
-    public ResponseEntity<ApiResponse<ProjectDto>> getProject(@PathVariable Long projectId) {
+    public ResponseEntity<ApiResponse<ProjectDto>> getProject(@PathVariable UUID projectId) {
         ProjectDto project = projectService.getProjectById(projectId);
         ApiResponse<ProjectDto> response = new ApiResponse<>(true, "Project retrieved successfully", project);
         return ResponseEntity.ok(response);
@@ -39,7 +43,7 @@ public class ProjectController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ProjectDto>>> listProjects(
             @RequestParam(required = false) String search,
-            @RequestParam(required = false) Long ownerId,
+            @RequestParam(required = false) UUID ownerId,
             Pageable pageable) {
         Page<ProjectDto> projects = projectService.listProjects(search, ownerId, pageable);
         ApiResponse<Page<ProjectDto>> response = new ApiResponse<>(true, "Projects retrieved successfully", projects);
@@ -48,7 +52,7 @@ public class ProjectController {
 
     @PutMapping("/{projectId}")
     public ResponseEntity<ApiResponse<ProjectDto>> updateProject(
-            @PathVariable Long projectId,
+            @PathVariable UUID projectId,
             @Valid @RequestBody UpdateProjectRequest request) {
         ProjectDto project = projectService.updateProject(projectId, request);
         ApiResponse<ProjectDto> response = new ApiResponse<>(true, "Project updated successfully", project);
@@ -56,7 +60,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{projectId}")
-    public ResponseEntity<ApiResponse<Void>> deleteProject(@PathVariable Long projectId) {
+    public ResponseEntity<ApiResponse<Void>> deleteProject(@PathVariable UUID projectId) {
         projectService.deleteProject(projectId);
         ApiResponse<Void> response = new ApiResponse<>(true, "Project deleted successfully", null);
         return ResponseEntity.ok(response);
@@ -64,7 +68,7 @@ public class ProjectController {
 
     @PostMapping("/{projectId}/members")
     public ResponseEntity<ApiResponse<ProjectDto.ProjectMemberDto>> addMember(
-            @PathVariable Long projectId,
+            @PathVariable UUID projectId,
             @Valid @RequestBody AddProjectMemberRequest request) {
         ProjectDto.ProjectMemberDto member = projectService.addMember(projectId, request);
         ApiResponse<ProjectDto.ProjectMemberDto> response = new ApiResponse<>(true, "Member added successfully", member);
@@ -72,7 +76,7 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectId}/members")
-    public ResponseEntity<ApiResponse<List<ProjectDto.ProjectMemberDto>>> getMembers(@PathVariable Long projectId) {
+    public ResponseEntity<ApiResponse<List<ProjectDto.ProjectMemberDto>>> getMembers(@PathVariable UUID projectId) {
         List<ProjectDto.ProjectMemberDto> members = projectService.getMembers(projectId);
         ApiResponse<List<ProjectDto.ProjectMemberDto>> response = new ApiResponse<>(true, "Members retrieved successfully", members);
         return ResponseEntity.ok(response);

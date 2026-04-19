@@ -1,4 +1,5 @@
 package com.example.task_manager_backend.features.projects.usecases;
+import java.util.UUID;
 
 import com.example.task_manager_backend.features.projects.domain.ProjectMember;
 import com.example.task_manager_backend.features.projects.repositories.ProjectMemberRepository;
@@ -14,7 +15,7 @@ public class GetProjectMembersHandler {
         this.projectMemberRepository = projectMemberRepository;
     }
 
-    public List<ProjectMember> execute(Long projectId) {
+    public List<ProjectMember> execute(UUID projectId) {
         return projectMemberRepository.findByProjectIdAndActiveTrue(projectId);
     }
 }

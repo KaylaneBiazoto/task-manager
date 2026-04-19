@@ -4,13 +4,15 @@ import com.example.task_manager_backend.features.auth.domain.User;
 import com.example.task_manager_backend.features.auth.repositories.UserRepository;
 import com.example.task_manager_backend.features.projects.domain.Project;
 import com.example.task_manager_backend.features.projects.repositories.ProjectRepository;
-import com.example.task_manager_backend.features.tasks.core.TaskBusinessException;
-import com.example.task_manager_backend.features.tasks.core.TaskNotFoundException;
-import com.example.task_manager_backend.features.tasks.core.UpdateTaskRequest;
+import com.example.task_manager_backend.features.tasks.core.exception.TaskBusinessException;
+import com.example.task_manager_backend.features.tasks.core.exception.TaskNotFoundException;
+import com.example.task_manager_backend.features.tasks.core.dto.UpdateTaskRequest;
 import com.example.task_manager_backend.features.tasks.domain.Task;
 import com.example.task_manager_backend.features.tasks.domain.TaskStatus;
 import com.example.task_manager_backend.features.tasks.repositories.TaskRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 public class UpdateTaskHandler {
@@ -24,7 +26,7 @@ public class UpdateTaskHandler {
         this.userRepository = userRepository;
     }
 
-    public Task execute(Long taskId, UpdateTaskRequest request, Long currentUserId, String currentUserRole) {
+    public Task execute(UUID taskId, UpdateTaskRequest request, UUID currentUserId, String currentUserRole) {
         Task task = taskRepository.findByIdAndActiveTrue(taskId)
                 .orElseThrow(() -> new TaskNotFoundException("Task not found"));
 
@@ -34,7 +36,7 @@ public class UpdateTaskHandler {
         }
 
         // Se está tentando mudar o assignee
-        if (request.assigneeId() != null && !request.assigneeId().equals(task.getAssignee().getId())) {
+        if (request.assigneeId() != null && (task.getAssignee() == null || !request.assigneeId().equals(task.getAssignee().getId()))) {
             User newAssignee = userRepository.findByIdAndActiveTrue(request.assigneeId())
                     .orElseThrow(() -> new TaskBusinessException("Assignee user not found"));
 
@@ -49,7 +51,6 @@ public class UpdateTaskHandler {
             task.setAssignee(newAssignee);
         }
 
-        // Atualizar outros campos
         if (request.title() != null) {
             task.setTitle(request.title());
         }

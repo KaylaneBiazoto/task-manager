@@ -1,7 +1,7 @@
 package com.example.task_manager_backend.features.auth.usecases;
 
-import com.example.task_manager_backend.features.auth.core.CreateUserRequest;
-import com.example.task_manager_backend.features.auth.core.UserBusinessException;
+import com.example.task_manager_backend.features.auth.core.dto.CreateUserRequest;
+import com.example.task_manager_backend.features.auth.core.exception.UserBusinessException;
 import com.example.task_manager_backend.features.auth.domain.User;
 import com.example.task_manager_backend.features.auth.repositories.UserRepository;
 import org.springframework.stereotype.Component;
@@ -28,8 +28,8 @@ public class CreateUserHandler {
         User user = new User();
         user.setUsername(request.username());
         user.setEmail(request.email());
-        user.setPassword(request.password()); // TODO: Implement password hashing with JWT implementation
-        
+        user.setPassword(request.password());
+
         // Set role with default to MEMBER
         String role = request.role();
         if (role == null || role.isBlank()) {

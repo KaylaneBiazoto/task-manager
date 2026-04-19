@@ -1,11 +1,13 @@
 package com.example.task_manager_backend.features.auth.usecases;
 
-import com.example.task_manager_backend.features.auth.core.UpdateUserRequest;
-import com.example.task_manager_backend.features.auth.core.UserBusinessException;
-import com.example.task_manager_backend.features.auth.core.UserNotFoundException;
+import com.example.task_manager_backend.features.auth.core.dto.UpdateUserRequest;
+import com.example.task_manager_backend.features.auth.core.exception.UserBusinessException;
+import com.example.task_manager_backend.features.auth.core.exception.UserNotFoundException;
 import com.example.task_manager_backend.features.auth.domain.User;
 import com.example.task_manager_backend.features.auth.repositories.UserRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 public class UpdateUserHandler {
@@ -15,7 +17,7 @@ public class UpdateUserHandler {
         this.userRepository = userRepository;
     }
 
-    public User execute(Long userId, UpdateUserRequest request) {
+    public User execute(UUID userId, UpdateUserRequest request) {
         User user = userRepository.findByIdAndActiveTrue(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
@@ -41,7 +43,7 @@ public class UpdateUserHandler {
 
         // Update password if provided
         if (request.password() != null && !request.password().isBlank()) {
-            user.setPassword(request.password()); // TODO: Implement password hashing with JWT implementation
+            user.setPassword(request.password());
         }
 
         // Update role if provided

@@ -1,4 +1,5 @@
 package com.example.task_manager_backend.features.projects.repositories;
+import java.util.UUID;
 
 import com.example.task_manager_backend.features.projects.domain.ProjectMember;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProjectMemberRepository extends JpaRepository<ProjectMember, Long> {
-    List<ProjectMember> findByProjectIdAndActiveTrue(Long projectId);
+public interface ProjectMemberRepository extends JpaRepository<ProjectMember, UUID> {
+    List<ProjectMember> findByProjectIdAndActiveTrue(UUID projectId);
     
     Optional<ProjectMember> findByIdAndActiveTrue(Long id);
 }

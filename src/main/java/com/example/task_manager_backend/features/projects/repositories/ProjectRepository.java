@@ -9,10 +9,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface ProjectRepository extends JpaRepository<Project, Long> {
-    Optional<Project> findByIdAndActiveTrue(Long id);
+public interface ProjectRepository extends JpaRepository<Project, UUID> {
+    Optional<Project> findByIdAndActiveTrue(UUID id);
     Page<Project> findByActiveTrue(Pageable pageable);
     
     @Query("SELECT p FROM Project p WHERE p.active = true " +
@@ -26,7 +27,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
            "OR LOWER(p.description) LIKE LOWER(CONCAT('%', :search, '%')))")
     Page<Project> findActiveWithFilters(
             @Param("search") String search,
-            @Param("ownerId") Long ownerId,
+            @Param("ownerId") UUID ownerId,
             Pageable pageable);
 }
 

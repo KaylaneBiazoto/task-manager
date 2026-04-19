@@ -2,7 +2,7 @@ package com.example.task_manager_backend.features.tasks.domain;
 
 import com.example.task_manager_backend.features.auth.domain.User;
 import com.example.task_manager_backend.features.projects.domain.Project;
-import com.example.task_manager_backend.infrastructure.persistence.BaseAuditableEntity;
+import com.example.task_manager_backend.infrastructure.persistence.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Table(name = "tasks")
-public class Task extends BaseAuditableEntity {
+public class Task extends BaseEntity {
 
     @Column(nullable = false, length = 200)
     private String title;

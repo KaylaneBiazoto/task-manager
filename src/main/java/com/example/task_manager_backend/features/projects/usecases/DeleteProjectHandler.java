@@ -1,6 +1,7 @@
 package com.example.task_manager_backend.features.projects.usecases;
+import java.util.UUID;
 
-import com.example.task_manager_backend.features.projects.core.ProjectNotFoundException;
+import com.example.task_manager_backend.features.projects.core.exception.ProjectNotFoundException;
 import com.example.task_manager_backend.features.projects.domain.Project;
 import com.example.task_manager_backend.features.projects.repositories.ProjectRepository;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ public class DeleteProjectHandler {
         this.projectRepository = projectRepository;
     }
 
-    public void execute(Long projectId) {
+    public void execute(UUID projectId) {
         Project project = projectRepository.findByIdAndActiveTrue(projectId)
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
 

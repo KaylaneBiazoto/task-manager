@@ -1,6 +1,6 @@
 package com.example.task_manager_backend.features.auth.domain;
 
-import com.example.task_manager_backend.infrastructure.persistence.BaseAuditableEntity;
+import com.example.task_manager_backend.infrastructure.persistence.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +19,7 @@ import java.util.Collections;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class User extends BaseAuditableEntity implements UserDetails {
+public class User extends BaseEntity implements UserDetails {
 
     private String username;
 

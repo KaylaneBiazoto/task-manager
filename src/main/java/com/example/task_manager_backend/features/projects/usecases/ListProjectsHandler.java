@@ -1,4 +1,5 @@
 package com.example.task_manager_backend.features.projects.usecases;
+import java.util.UUID;
 
 import com.example.task_manager_backend.features.projects.domain.Project;
 import com.example.task_manager_backend.features.projects.repositories.ProjectRepository;
@@ -18,7 +19,7 @@ public class ListProjectsHandler {
         return projectRepository.findByActiveTrue(pageable);
     }
     
-    public Page<Project> execute(String search, Long ownerId, Pageable pageable) {
+    public Page<Project> execute(String search, UUID ownerId, Pageable pageable) {
         if ((search == null || search.isEmpty()) && ownerId == null) {
             return projectRepository.findByActiveTrue(pageable);
         }

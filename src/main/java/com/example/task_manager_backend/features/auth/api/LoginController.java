@@ -1,10 +1,10 @@
 package com.example.task_manager_backend.features.auth.api;
 
 import com.example.task_manager_backend.core.dto.ApiResponse;
-import com.example.task_manager_backend.features.auth.core.LoginRequest;
-import com.example.task_manager_backend.features.auth.core.LoginResponse;
-import com.example.task_manager_backend.features.auth.core.RegisterRequest;
-import com.example.task_manager_backend.features.auth.core.UserDto;
+import com.example.task_manager_backend.features.auth.core.dto.LoginRequest;
+import com.example.task_manager_backend.features.auth.core.dto.LoginResponse;
+import com.example.task_manager_backend.features.auth.core.dto.RegisterRequest;
+import com.example.task_manager_backend.features.auth.core.dto.UserDto;
 import com.example.task_manager_backend.features.auth.domain.User;
 import com.example.task_manager_backend.features.auth.repositories.UserRepository;
 import com.example.task_manager_backend.infrastructure.security.TokenService;
